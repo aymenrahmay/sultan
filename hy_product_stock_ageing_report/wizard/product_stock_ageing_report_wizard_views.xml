@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="product_stock_ageing_report_form_view" model="ir.ui.view">
+            <field name="name">Product Stock Ageing Report Form View</field>
+            <field name="model">product.stock.ageing.report.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="report_generated" invisible="1"/>
+                            <field name="date" invisible="report_generated"/>
+                            <field name="location_ids" widget="many2many_tags" invisible="report_generated"/>
+                            <field name="category_ids" widget="many2many_tags" invisible="report_generated"/>
+                            <field name="xlsx_file" readonly="1" filename="file_name" invisible="not report_generated"/>
+                            <field name="file_name" invisible="1"/>
+                        </group>
+
+                    </sheet>
+                    <footer invisible="report_generated">
+                        <button string="Generate" name="action_generate_xlsx_report" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_product_stock_ageing_report" model="ir.actions.act_window">
+            <field name="name">Product Stock Ageing Report</field>
+            <field name="res_model">product.stock.ageing.report.wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="hy_product_stock_ageing_report.product_stock_ageing_report_form_view"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Product Stock Ageing Report" id="menu_product_stock_ageing_report" action="action_product_stock_ageing_report" parent="stock.menu_warehouse_report"/>
+
+    </data>
+
+</odoo>
