@@ -1,0 +1,17 @@
+<odoo>
+    <data>
+        <record id="action_electronic_simplified_report_invoice" model="ir.actions.report">
+            <field name="name">Simplified Tax Invoice</field>
+            <field name="model">account.move</field>
+            <field name="binding_model_id" ref="model_account_move" />
+            <!-- <field name="report_type">qweb-pdf</field> -->
+            <field name="report_type">qweb-html</field>
+
+            <field name="report_name">sh_electronic_invoice_qr_saudi_invoice.report_simplified_invoice_action</field>
+            <field name="report_file">sh_electronic_invoice_qr_saudi_invoice.report_simplified_invoice_action</field>
+            <field name="attachment">'simplified_tax_invoice.pdf'</field>
+            <field name="attachment_use">True</field>
+        </record>
+
+    </data>
+</odoo>

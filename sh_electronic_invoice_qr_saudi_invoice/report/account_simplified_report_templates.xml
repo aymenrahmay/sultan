@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="sh_simplified_invoice_report_doc">
+        <t t-call="sh_electronic_invoice_qr_saudi_invoice.sh_external_layout">
+            <div class="page">
+                <br />
+                <div class="row border">
+                    <div
+                        class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center pt-1 pb-1 sh-static-info"
+                        style="background:#DEDEDE;border: 1px solid #212121;">
+                        <t t-if="o.move_type == 'out_invoice'">
+                            <h5 style="margin-bottom: 0px;font-weight: bold;font-size: 16px;">Simplified
+                                Tax Invoice / فاتورة ضريبية مبسطة
+                            </h5>
+                        </t>
+                        <t t-if="o.move_type == 'out_refund'">
+                            <h5 style="margin-bottom: 0px;font-weight: bold;font-size: 16px;">Simplified
+                                Credit Note / مذكرة ائتمان مبسطة
+                            </h5>
+                        </t>
+                        <t t-if="o.move_type == 'in_invoice'">
+                            <h5 style="margin-bottom: 0px;font-weight: bold;font-size: 16px;">Simplified
+                                Bill / فاتورة مبسطة
+                            </h5>
+                        </t>
+                        <t t-if="o.move_type == 'in_refund'">
+                            <h5 style="margin-bottom: 0px;font-weight: bold;font-size: 16px;">Simplified
+                                Debit Note / مذكرة الخصم المبسطة
+                            </h5>
+                        </t>
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="row">
+                    <t t-if="o.move_type == 'out_invoice' or o.move_type == 'out_refund'">
+                        <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-10 pl-0 pr-0">
+                            <table class="table table-bordered sh-label-table" style="font-size: 10px;">
+                                <tr>
+                                    <th scope="row"
+                                        style="text-align: left;padding: 2px 8px; border:1px solid #777777;">Number
+                                        Invoice</th>
+                                    <td
+                                        style="text-align: center;padding: 2px 8px; border:1px solid #777777; border-left:0;">
+                                        <t t-esc="o.name" />
+                                    </td>
+                                    <td
+                                        style="text-align: right;padding: 2px 8px; border:1px solid #777777; border-left:0;">رقم
+                                        الفاتورة
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th scope="row"
+                                        style="text-align: left;padding: 2px 8px; border:1px solid #777777;">Invoice
+                                        Date</th>
+                                    <td
+                                        style="text-align: center;padding: 2px 8px; border:1px solid #777777; border-left:0;">
+                                        <t t-esc="o.invoice_date" />
+                                    </td>
+                                    <td
+                                        style="text-align: right;padding: 2px 8px; border:1px solid #777777; border-left:0;">تاريخ
+                                        الفاتورة
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th scope="row"
+                                        style="text-align: left;padding: 2px 8px; border:1px solid #777777;">Due
+                                        Date</th>
+                                    <td
+                                        style="text-align: center;padding: 2px 8px; border:1px solid #777777; border-left:0;">
+                                        <t t-esc="o.invoice_date_due" />
+                                    </td>
+                                    <td
+                                        style="text-align: right;padding: 2px 8px; border:1px solid #777777; border-left:0;">تاريخ
+                                        الاستحقاق
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th scope="row"
+                                        style="text-align: left;padding: 2px 8px; border:1px solid #777777;">Payment
+                                        Terms</th>
+                                    <td
+                                        style="text-align: center;padding: 2px 8px; border:1px solid #777777; border-left:0;">
+                                        <t t-esc="o.invoice_payment_term_id.name" />
+                                    </td>
+                                    <td
+                                        style="text-align: right;padding: 2px 8px; border:1px solid #777777; border-left:0;">شروط
+                                        الدفع
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div
+                            class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 d-flex justify-content-end text-right">
+                            <div class="text-center" style="display: flex;justify-content: center;">
+                                <t t-if="o.sh_qr_code">
+                                    <img
+                                        t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('QR', o.sh_qr_code, 100, 100)" />
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-if="o.move_type == 'in_invoice' or o.move_type == 'in_refund'">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0 pr-0">
+                            <table class="table table-bordered sh-label-table" style="font-size: 10px;">
+                                <tr>
+                                    <th scope="row"
+                                        style="text-align: left;padding: 2px 8px; border:1px solid #777777;">Number
+                                        Invoice</th>
+                                    <td
+                                        style="text-align: center;padding: 2px 8px; border:1px solid #777777; border-left:0;">
+                                        <t t-esc="o.name" />
+                                    </td>
+                                    <td
+                                        style="text-align: right;padding: 2px 8px; border:1px solid #777777; border-left:0;">رقم
+                                        الفاتورة
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th scope="row"
+                                        style="text-align: left;padding: 2px 8px; border:1px solid #777777;">Invoice
+                                        Date</th>
+                                    <td
+                                        style="text-align: center;padding: 2px 8px; border:1px solid #777777; border-left:0;">
+                                        <t t-esc="o.invoice_date" />
+                                    </td>
+                                    <td
+                                        style="text-align: right;padding: 2px 8px; border:1px solid #777777; border-left:0;">تاريخ
+                                        الفاتورة
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th scope="row"
+                                        style="text-align: left;padding: 2px 8px; border:1px solid #777777;">Due
+                                        Date</th>
+                                    <td
+                                        style="text-align: center;padding: 2px 8px; border:1px solid #777777; border-left:0;">
+                                        <t t-esc="o.invoice_date_due" />
+                                    </td>
+                                    <td
+                                        style="text-align: right;padding: 2px 8px; border:1px solid #777777; border-left:0;">تاريخ
+                                        الاستحقاق
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th scope="row"
+                                        style="text-align: left;padding: 2px 8px; border:1px solid #777777;">Payment
+                                        Terms</th>
+                                    <td
+                                        style="text-align: center;padding: 2px 8px; border:1px solid #777777; border-left:0;">
+                                        <t t-esc="o.invoice_payment_term_id.name" />
+                                    </td>
+                                    <td
+                                        style="text-align: right;padding: 2px 8px; border:1px solid #777777; border-left:0;">شروط
+                                        الدفع
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </t>
+
+                </div>
+
+                <br />
+
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0 pr-0">
+                        <table class="table table-bordered sh-line-items" style="font-size: 14px;">
+                            <tr style="background:#DEDEDE;">
+                                <th scope="row" style="border:1px solid #777777;text-align: center;">Number
+                                    of goods or services<br /> عدد السلع أو الخدمات </th>
+                                <th scope="row" style="border:1px solid #777777;text-align: center;">Unit
+                                    Price<br /> سعر الوحدة </th>
+                                <th scope="row" style="border:1px solid #777777;text-align: center;">
+                                    Quantity<br /> كمية </th>
+
+                                <th scope="row" style="border:1px solid #777777;text-align: center;">Item
+                                    Subtotal<br />(Including VAT)<br /> المجموع الفرعي للعنصر <br />
+                                    بما في ذلك ضريبة القيمة المضافة </th>
+                            </tr>
+
+                            <t t-set="lines"
+                                t-value="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)" />
+
+                            <t t-foreach="lines" t-as="line">
+
+                                <tr>
+                                    <td style="padding: 2px 10px;border:1px solid #777777">
+                                        <span t-esc="line.product_id.name" />
+                                        <br />
+
+                                    </td>
+                                    <td t-esc="line.price_unit"
+                                        t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                        class="text-center"
+                                        style="padding: 2px 2px;border:1px solid #777777">
+
+                                    </td>
+
+                                    <td t-esc="line.quantity"
+                                        style="padding: 2px 10px;border:1px solid #777777">
+
+                                    </td>
+
+                                    <td t-esc="line.price_total"
+                                        t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                        class="text-center"
+                                        style="padding: 2px 2px;border:1px solid #777777">
+
+                                    </td>
+                                </tr>
+                            </t>
+                        </table>
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0 pr-0">
+                        <table class="table table-bordered sh-total-table" style="font-size: 10px;">
+                            <tr>
+                                <th scope="row"
+                                    style="text-align: Center;padding: 2px 10px;  border: 1px solid #777777; text-align:left;">Total
+                                    Taxable Amount(Excluding VAT)</th>
+                                <td
+                                    style="text-align: Center;padding: 2px 2px;  border: 1px solid #777777; border-left:0;">إجمالي
+                                    المبلغ الخاضع للضريبة (باستثناء ضريبة القيمة المضافة)
+                                </td>
+                                <td
+                                    style="text-align: Center;padding: 2px 2px;  border: 1px solid #777777; text-align:right; border-left:0;"
+                                    t-esc="o.amount_untaxed"
+                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                    class="border-left-0">
+
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row"
+                                    style="text-align: Center;padding: 2px 10px; text-align:left; border: 1px solid #777777;">Total
+                                    VAT</th>
+                                <td
+                                    style="text-align: Center;padding: 2px 2px; border: 1px solid #777777; border-left:0;">
+                                    إجمالي ضريبة القيمة المضافة
+                                </td>
+                                <td
+                                    style="text-align: Center;padding: 2px 2px; border: 1px solid #777777; border-left:0; text-align:right;"
+                                    t-esc="o.amount_total - o.amount_untaxed"
+                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                    class="border-left-0">
+
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row"
+                                    style="text-align: Center;padding: 2px 10px; text-align:left; border: 1px solid #777777;">Total
+                                    Amount Due</th>
+                                <td
+                                    style="text-align: Center;padding: 2px 2px; border: 1px solid #777777; border-left:0;">
+                                    إجمالي المبلغ المستحق
+                                </td>
+                                <td
+                                    style="text-align: Center;padding: 2px 2px; border: 1px solid #777777; border-left:0; text-align:right;"
+                                    t-esc="o.amount_residual"
+                                    t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                    class="border-left-0">
+
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </t>
+    </template>
+</odoo>
