@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="sh_external_layout_standard">
+            <style type="text/css">
+                    .sh-static-info,
+                    .sh-label-table tr > th,
+                    .sh-label-table tr > td:first-child,
+                    .sh-label-table tr > td:last-child,
+                    .sh-total-table tr > th,
+                    .sh-total-table tr > td:nth-child(2),
+                    .sh-line-items tr:first-child > th {
+                        background:#DEDEDE !important;
+                        font-weight:bold !important;
+                    }
+            </style>
+            <div class="header" style="font-size: 12px;">
+                <div class="row" style="border:1px solid #777777;">
+                    <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 pt-1 pb-1 text-left px-2">
+                        <span t-if="company.name">
+                            <b>
+                                <span t-esc="company.name" />
+                            </b>
+                            <br />
+                        </span>
+
+                        <span t-if="company.street">
+                            <span t-esc="company.street" />
+                            <br />
+                        </span>
+
+                        <span t-if="company.street2">
+                            <span t-esc="company.street2" />
+                            <br />
+                        </span>
+
+                        <span t-if="company.city or company.zip">
+                            <span t-esc="company.city" />
+                            <span t-esc="company.zip" />
+                            <br />
+                        </span>
+
+                        <span t-if="company.country_id">
+                            <span t-esc="company.country_id.name" />
+                        </span>
+
+                    </div>
+
+                    <div
+                        class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 text-center d-flex justify-content-center align-items-center pt-1">
+                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"
+                            style="width: 40%;max-width: 40%;" />
+                    </div>
+
+                    <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 pt-1 pb-1 px-2"
+                        style="text-align:right;">
+                        <span t-if="company.sh_name">
+                            <b>
+                                <span t-esc="company.sh_name" />
+                            </b>
+                            <br />
+                        </span>
+
+                        <span t-if="company.sh_street">
+                            <span t-esc="company.sh_street" />
+                            <br />
+                        </span>
+
+                        <span t-if="company.sh_street2">
+                            <span t-esc="company.sh_street2" />
+                            <br />
+                        </span>
+
+                        <span t-if="company.sh_city or company.sh_zip">
+                            <span t-esc="company.sh_city" />
+                            <span t-esc="company.sh_zip" />
+                            <br />
+                        </span>
+
+                        <span t-if="company.sh_country_id">
+                            <span t-esc="company.sh_country_id" />
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"
+                        style="border:1px solid #777777; border-top:0px;">
+                        <table class="table border-top-0 sh-label-table" style="margin-bottom: 0px;">
+                            <tr>
+                                <td style="border-top: 0px;padding: 1px 8px;  ">CR No.:</td>
+                                <td style="border-top: 0px;padding: 1px 8px;">
+                                    <span t-if="company.company_registry"
+                                        t-esc="company.company_registry" />
+                                </td>
+                                <td style="border-top: 0px;padding: 1px 2px; text-align:right;">رقم السجل التجاري
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"
+                        style="border:1px solid #777777; border-left:0px; border-top:0px;">
+                        <table class="table border-top-0 sh-label-table" style="margin-bottom: 0px;">
+                            <tr>
+                                <td style="border-top: 0px;padding: 1px 8px;">VAT No.:</td>
+                                <td style="border-top: 0px;padding: 1px 8px;">
+                                    <span t-if="company.vat" t-esc="company.vat" />
+                                </td>
+                                <td style="border-top: 0px;padding: 1px 2px; text-align:right;">
+                                    الرقم الضريبي </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"
+                t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id"
+                t-att-data-oe-lang="o and o.env.context.get('lang')">
+                <t t-raw="0" />
+            </div>
+
+            <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
+                <div class="text-center"
+                    style="border: 1px solid #777777; margin:0px -15px; margin-bottom:20px !important;">
+                    <ul class="list-inline" style="margin-bottom: 0px;">
+                        <li t-if="company.phone" class="list-inline-item d-inline">
+                            <span class="o_force_ltr" t-field="company.phone" />
+                        </li>
+                        <li t-if="company.email" class="list-inline-item d-inline">
+                            <span t-field="company.email" />
+                        </li>
+                        <li t-if="company.website" class="list-inline-item d-inline">
+                            <span t-field="company.website" />
+                        </li>
+                        <li t-if="company.vat" class="list-inline-item d-inline"><t t-esc="'Tax ID'" />
+                            : <span t-field="company.vat" /></li>
+                    </ul>
+                </div>
+            </div>
+        </template>
+
+        <template id="sh_external_layout">
+            <t t-if="not o" t-set="o" t-value="doc" />
+
+            <t t-if="not company">
+                <!-- Multicompany -->
+                <t t-if="company_id">
+                    <t t-set="company" t-value="company_id" />
+                </t>
+                <t t-elif="o and 'company_id' in o and o.company_id.sudo()">
+                    <t t-set="company" t-value="o.company_id.sudo()" />
+                </t>
+                <t t-else="else">
+                    <t t-set="company" t-value="res_company" />
+                </t>
+            </t>
+            <t t-call="sh_electronic_invoice_qr_saudi_invoice.sh_external_layout_standard">
+                <t t-raw="0" />
+            </t>
+        </template>
+
+        <template id="report_simplified_invoice_action">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t
+                        t-call="sh_electronic_invoice_qr_saudi_invoice.sh_simplified_invoice_report_doc"
+                        t-lang="o.partner_id.lang" />
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>    
