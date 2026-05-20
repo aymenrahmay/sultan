@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_delivery_document_sultan" inherit_id="stock.report_delivery_document">
+        <xpath expr="//t[@t-set='address']" position="replace">
+            <t t-set="address"/>
+        </xpath>
+        <xpath expr="//t[@t-set='information_block']" position="replace">
+            <t t-set="information_block"/>
+        </xpath>
+        <xpath expr="//div[hasclass('page')]" position="replace">
+            <div class="page sultan-delivery-slip">
+                <style type="text/css">
+                    .sultan-delivery-slip {
+                        font-size:10px;
+                    }
+                    .sultan-delivery-slip .sultan-static {
+                        background:#DEDEDE !important;
+                        font-weight:bold !important;
+                    }
+                    .sultan-delivery-slip .sultan-table {
+                        width:100%;
+                        table-layout:fixed;
+                        margin-bottom:0;
+                    }
+                    .sultan-delivery-slip .sultan-table th,
+                    .sultan-delivery-slip .sultan-table td {
+                        border:1px solid #777777;
+                        padding:2px 8px;
+                        vertical-align:middle;
+                    }
+                    .sultan-delivery-slip .sultan-title {
+                        border:1px solid #777777;
+                        padding:3px 8px;
+                        text-align:center;
+                        font-size:13px;
+                    }
+                    .sultan-delivery-slip .sultan-value {
+                        background:#FFFFFF !important;
+                        font-weight:normal !important;
+                    }
+                    .sultan-delivery-slip .sultan-nowrap {
+                        white-space:nowrap;
+                    }
+                    .sultan-delivery-slip address {
+                        margin-bottom:0;
+                    }
+                </style>
+
+                <t t-set="format_number" t-value="lambda x: int(x) if x == int(x) else x"/>
+                <t t-set="delivery_partner" t-value="o.move_ids[:1].partner_id or o.partner_id"/>
+
+                <div class="row mt-1">
+                    <div class="col-12 pl-0 pr-0">
+                        <table class="table table-bordered sultan-table">
+                            <colgroup>
+                                <col style="width:25%;" />
+                                <col style="width:10%;" />
+                                <col style="width:8%;" />
+                                <col style="width:14%;" />
+                                <col style="width:12%;" />
+                                <col style="width:13%;" />
+                                <col style="width:8%;" />
+                                <col style="width:10%;" />
+                            </colgroup>
+                            <tr>
+                                <td colspan="8" class="sultan-static sultan-title">
+                                    <span>سند التسليم / Delivery Slip</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th colspan="2" class="sultan-static" style="text-align:left;">Customer / العميل</th>
+                                <td colspan="4" class="sultan-static" style="text-align:right;">Delivery Information / بيانات التسليم</td>
+                                <td colspan="2" class="sultan-static" style="text-align:center;">Barcode / الباركود</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" rowspan="2" class="sultan-value" style="vertical-align:top;text-align:left;">
+                                    <div t-if="delivery_partner"
+                                         t-out="delivery_partner"
+                                         t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
+                                    <div t-else="" t-out="o.company_id.partner_id"
+                                         t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
+                                </td>
+                                <td class="sultan-static" style="text-align:left;">Picking reference</td>
+                                <td colspan="2" class="sultan-value" style="text-align:center;"><span t-field="o.name"/></td>
+                                <td class="sultan-static" style="text-align:right;">رقم المستند</td>
+                                <td colspan="2" rowspan="2" class="sultan-value" style="text-align:center;vertical-align:middle;">
+                                    <img t-if="o.name"
+                                         t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=1' % ('Code128', o.name, 230, 45)"
+                                         style="max-width:105px;height:38px;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="sultan-static" style="text-align:left;">Source Document</td>
+                                <td colspan="2" class="sultan-value" style="text-align:center;"><span t-field="o.origin"/></td>
+                                <td class="sultan-static" style="text-align:right;">المستند المرجعي</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-12 pl-0 pr-0">
+                        <table class="table table-bordered sultan-table">
+                            <colgroup>
+                                <col style="width:25%;" />
+                                <col style="width:10%;" />
+                                <col style="width:8%;" />
+                                <col style="width:14%;" />
+                                <col style="width:12%;" />
+                                <col style="width:13%;" />
+                                <col style="width:8%;" />
+                                <col style="width:10%;" />
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th colspan="4" class="sultan-static" style="text-align:center;">Product<br/>المنتج</th>
+                                    <th class="sultan-static" style="text-align:center;">Done<br/>الكمية</th>
+                                    <th class="sultan-static" style="text-align:center;">UoM<br/>الوحدة</th>
+                                    <th class="sultan-static" style="text-align:center;">Lot<br/>الدفعة</th>
+                                    <th class="sultan-static" style="text-align:center;">Package<br/>الطرد</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="move_lines" t-value="o.move_ids.filtered(lambda move: move.product_uom_qty)"/>
+                                <tr t-foreach="move_lines" t-as="move">
+                                    <td colspan="4">
+                                        <span t-field="move.product_id"/>
+                                        <div t-if="move.description_picking and move.description_picking != move.product_id.name and move._get_report_description_picking()">
+                                            <span t-out="move._get_report_description_picking()" t-options="{'widget': 'text'}"/>
+                                        </div>
+                                    </td>
+                                    <td class="text-center sultan-nowrap"><span t-out="format_number(move.quantity)"/></td>
+                                    <td class="text-center"><span t-field="move.product_uom" groups="uom.group_uom"/></td>
+                                    <td class="text-center"></td>
+                                    <td class="text-center"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row mt-4" style="page-break-inside:avoid;">
+                    <div class="col-6 pl-0">
+                        <table class="table table-bordered sultan-table">
+                            <tr>
+                                <td colspan="3" class="sultan-static" style="height:22px;text-align:center;">Receiver Information / بيانات المستلم</td>
+                            </tr>
+                            <tr>
+                                <td class="sultan-static" style="width:34%;height:22px;text-align:left;">Receiver Name</td>
+                                <td class="sultan-value" style="width:32%;height:22px;text-align:center;"><span t-field="o.receiver_name"/></td>
+                                <td class="sultan-static" style="width:34%;height:22px;text-align:right;">اسم المستلم</td>
+                            </tr>
+                            <tr>
+                                <td class="sultan-static" style="height:22px;text-align:left;">Receiver Phone</td>
+                                <td class="sultan-value" style="height:22px;text-align:center;"><span t-field="o.receiver_phone"/></td>
+                                <td class="sultan-static" style="height:22px;text-align:right;">هاتف المستلم</td>
+                            </tr>
+                            <tr>
+                                <td class="sultan-static" style="height:22px;text-align:left;">Legal ID Number</td>
+                                <td class="sultan-value" style="height:22px;text-align:center;"><span t-field="o.receiver_legal_id"/></td>
+                                <td class="sultan-static" style="height:22px;text-align:right;">رقم الهوية</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-6 pr-0">
+                        <table class="table table-bordered sultan-table">
+                            <tr>
+                                <td class="sultan-static" style="height:22px;text-align:center;">Signature / التوقيع</td>
+                            </tr>
+                            <tr>
+                                <td style="height:66px;text-align:center;vertical-align:middle;">
+                                    <img t-if="o.signature" t-att-src="image_data_uri(o.signature)" style="max-height:40px;max-width:180px;"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
