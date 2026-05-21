@@ -16,20 +16,16 @@ class AccountMove(models.Model):
 
     add_product_arabic_name = fields.Boolean("Add Product Arabic Name",default=True)
     sh_vat = fields.Char(string="Vat",related="company_id.vat")
-    sh_qr_code = fields.Text(string="QR Code new",
-                             compute="generate_zatac_code")
+    sh_qr_code = fields.Text(string="QR Code new", compute="generate_zatac_code")
     sh_qr_code_img = fields.Binary(string = "QR Code Image",compute = "compute_sh_qr_code_img")
     amount_move_undiscounted = fields.Float('Amount Before Discount', compute='_compute_amount_move_undiscounted', digits=0)
-    amount_in_words = fields.Char(
-        compute='amount_word',
-        string='Amount ',
-        readonly=True,
-    )
-    amount_in_words_ar = fields.Char(
-        compute='amount_word',
-        string=' Amount arabic ',
-        readonly=True,
-    )
+    amount_in_words = fields.Char( compute='amount_word', string='Amount ', readonly=True,)
+    amount_in_words_ar = fields.Char( compute='amount_word', string=' Amount arabic ', readonly=True,)
+
+    receiver_name = fields.Char(string="Receiver Name")
+    receiver_phone = fields.Char(string="Receiver Phone Number")
+    receiver_legal_id = fields.Char(string="Legal ID Number")
+
 
     def _get_name_invoice_report(self):
         """Calls the report template"""

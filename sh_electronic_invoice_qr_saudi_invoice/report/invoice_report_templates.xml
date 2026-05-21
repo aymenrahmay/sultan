@@ -4,15 +4,105 @@
         <field name="paperformat_id"
             ref="sh_electronic_invoice_qr_saudi_invoice.paperformat_custom_saudi" />
     </record>
-    <template id="inherit_report_invoice_document" inherit_id="account.report_invoice_document">
+    <template id="report_invoice_use_sultan_document" inherit_id="account.report_invoice" priority="99">
+        <xpath expr="//t[@t-call='account.report_invoice_document']" position="attributes">
+            <attribute name="t-call">sh_electronic_invoice_qr_saudi_invoice.inherit_report_invoice_document</attribute>
+        </xpath>
+    </template>
+
+    <template id="inherit_report_invoice_document" inherit_id="account.report_invoice_document" primary="True" priority="99">
         <xpath expr="//t[@t-call='web.external_layout']" position="attributes">
-            <attribute name="t-call">sh_electronic_invoice_qr_saudi_invoice.sh_external_layout</attribute>
+            <attribute name="t-call">sh_electronic_invoice_qr_saudi_invoice.sultan_invoice_layout</attribute>
+        </xpath>
+        <xpath expr="//div[hasclass('row')][.//t[@t-set='address']]" position="replace">
+            <t />
+        </xpath>
+        <xpath expr="//t[@t-set='layout_document_title']" position="replace">
+            <t t-set="layout_document_title" />
         </xpath>
         <xpath expr="//div[hasclass('page')]" position="attributes">
             <attribute name="class" add="d-none" separator=" " />
         </xpath>
 
         <xpath expr="//div[hasclass('page')]" position="before">
+            <t t-set="company" t-value="o.company_id.sudo() or res_company" />
+            <div class="row mt-0" style="font-size:12px;">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0 pr-0">
+                    <div class="row" style="border:1px solid #777777;margin:0;">
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 pt-1 pb-1 text-left px-2">
+                            <span t-if="company.name">
+                                <b><span t-esc="company.name" /></b><br />
+                            </span>
+                            <span t-if="company.street">
+                                <span t-esc="company.street" /><br />
+                            </span>
+                            <span t-if="company.street2">
+                                <span t-esc="company.street2" /><br />
+                            </span>
+                            <span t-if="company.city or company.zip">
+                                <span t-esc="company.city" />
+                                <span t-esc="company.zip" /><br />
+                            </span>
+                            <span t-if="company.country_id">
+                                <span t-esc="company.country_id.name" />
+                            </span>
+                        </div>
+
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 text-center d-flex justify-content-center align-items-center pt-1">
+                            <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"
+                                style="width:100%;max-width:100%;object-fit:contain;height:80px;" />
+                        </div>
+
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 pt-1 pb-1 px-2" style="text-align:right;">
+                            <span t-if="company.sh_name">
+                                <b><span t-esc="company.sh_name" /></b><br />
+                            </span>
+                            <span t-if="company.sh_street">
+                                <span t-esc="company.sh_street" /><br />
+                            </span>
+                            <span t-if="company.sh_street2">
+                                <span t-esc="company.sh_street2" /><br />
+                            </span>
+                            <span t-if="company.sh_city or company.sh_zip">
+                                <span t-esc="company.sh_city" />
+                                <span t-esc="company.sh_zip" /><br />
+                            </span>
+                            <span t-if="company.sh_country_id">
+                                <span t-esc="company.sh_country_id" />
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin:0;">
+                        <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 pl-0 pr-0"
+                            style="border:1px solid #777777;border-top:0;">
+                            <table class="table border-top-0 sh-label-table" style="margin-bottom:0;font-size:10px;">
+                                <tr>
+                                    <td style="border-top:0;padding:1px 8px;">CR No.:</td>
+                                    <td style="border-top:0;padding:1px 8px;">
+                                        <span t-if="company.company_registry" t-esc="company.company_registry" />
+                                    </td>
+                                    <td style="border-top:0;padding:1px 2px;text-align:right;">رقم السجل التجاري</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 pl-0 pr-0"
+                            style="border:1px solid #777777;border-left:0;border-top:0;">
+                            <table class="table border-top-0 sh-label-table" style="margin-bottom:0;font-size:10px;">
+                                <tr>
+                                    <td style="border-top:0;padding:1px 8px;">VAT No.:</td>
+                                    <td style="border-top:0;padding:1px 8px;">
+                                        <span t-if="company.vat" t-esc="company.vat" />
+                                    </td>
+                                    <td style="border-top:0;padding:1px 2px;text-align:right;">الرقم الضريبي</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row border mt-1">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center pt-1 pb-1 sh-static-info"
                     style="background:#DEDEDE;border: 1px solid #777777;">
@@ -304,6 +394,79 @@
                     </span>
                 </div>
             </div>
+
+             <t groups="stock_account.group_lot_on_invoice">
+                <t t-set="lot_values" t-value="o._get_invoiced_lot_values()" />
+                <div t-if="lot_values" class="row mt-2" style="page-break-inside: avoid;">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0 pr-0">
+                        <table class="table table-bordered" name="invoice_snln_table" style="font-size: 10px;table-layout:fixed;width:100%;">
+                            <colgroup>
+                                <col style="width:50%;" />
+                                <col style="width:20%;" />
+                                <col style="width:30%;" />
+                            </colgroup>
+                            <thead>
+                                <tr style="background:#DEDEDE;">
+                                    <th scope="row" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:center;">Product<br />المنتج</th>
+                                    <th scope="row" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:center;">Quantity<br />الكمية</th>
+                                    <th scope="row" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:center;">Serial / Lot Number<br />الرقم التسلسلي / الدفعة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="lot_values" t-as="snln_line">
+                                    <td style="padding:2px 8px;border:1px solid #777777;">
+                                        <t t-esc="snln_line['product_name']" />
+                                    </td>
+                                    <td style="padding:2px 8px;border:1px solid #777777;text-align:center;">
+                                        <t t-esc="snln_line['quantity']" />
+                                        <t t-esc="snln_line['uom_name']" groups="uom.group_uom" />
+                                    </td>
+                                    <td style="padding:2px 8px;border:1px solid #777777;text-align:center;">
+                                        <t t-esc="snln_line['lot_name']" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+
+            <div class="row mt-4" style="page-break-inside:avoid;">
+                    <div class="col-6 pl-0">
+                        <table class="table table-bordered sultan-table">
+                            <tr style="background:#DEDEDE;">
+                                <td colspan="3" class="sultan-static" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:center;">Receiver Information / بيانات المستلم</td>
+                            </tr>
+                            <tr>
+                                <td class="sultan-static" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:center; background:#DEDEDE;">Receiver Name</td>
+                                <td class="sultan-value" style="width:32%;height:22px;text-align:center;"><span t-field="o.receiver_name"/></td>
+                                <td class="sultan-static" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:center; background:#DEDEDE;">إسم المستلم</td>
+                            </tr>
+                            <tr>
+                                <td class="sultan-static" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:center; background:#DEDEDE;">Receiver Phone</td>
+                                <td class="sultan-value" style="height:22px;text-align:center;"><span t-field="o.receiver_phone"/></td>
+                                <td class="sultan-static" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:center;">رقم هاتف المستلم</td>
+                            </tr>
+                            <tr>
+                                <td class="sultan-static" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:center; background:#DEDEDE;">Legal ID Number</td>
+                                <td class="sultan-value" style="height:22px;text-align:center;"><span t-field="o.receiver_legal_id"/></td>
+                                <td class="sultan-static" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:center; background:#DEDEDE;">رقم الهوية</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-6 pr-0">
+                        <table class="table table-bordered sultan-table">
+                            <tr style="background:#DEDEDE;">
+                                <td class="sultan-static" style="height:22px;text-align:center;">Signature / التوقيع</td>
+                            </tr>
+                            <tr>
+                                <td style="height:66px;text-align:center;vertical-align:middle;">
+                                    <img t-if="o.signature" t-att-src="image_data_uri(o.signature)" style="max-height:40px;max-width:180px;"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
         </xpath>
     </template>
 </odoo>

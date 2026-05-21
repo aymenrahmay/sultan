@@ -1,5 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+    <record id="paperformat_sultan_delivery_slip" model="report.paperformat">
+        <field name="name">Sultan Delivery Slip A4</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_spacing">0</field>
+        <field name="header_line" eval="False"/>
+        <field name="orientation">Portrait</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="stock.action_report_delivery" model="ir.actions.report">
+        <field name="paperformat_id" ref="sultan_stock.paperformat_sultan_delivery_slip"/>
+    </record>
+
+    <template id="hide_standard_delivery_header" inherit_id="web.external_layout_standard" priority="99">
+        <xpath expr="//div[contains(@t-attf-class, 'header o_company_')]" position="attributes">
+            <attribute name="t-if">not (o and o._name == 'stock.picking')</attribute>
+        </xpath>
+        <xpath expr="//t[@t-call='web.address_layout']" position="attributes">
+            <attribute name="t-if">not (o and o._name == 'stock.picking')</attribute>
+        </xpath>
+        <xpath expr="//h2[@t-out='layout_document_title']" position="attributes">
+            <attribute name="t-if">not (o and o._name == 'stock.picking')</attribute>
+        </xpath>
+    </template>
+
     <template id="report_delivery_document_sultan" inherit_id="stock.report_delivery_document">
         <xpath expr="//t[@t-set='address']" position="replace">
             <t t-set="address"/>
@@ -48,6 +78,34 @@
 
                 <t t-set="format_number" t-value="lambda x: int(x) if x == int(x) else x"/>
                 <t t-set="delivery_partner" t-value="o.move_ids[:1].partner_id or o.partner_id"/>
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+
+                <div class="row mt-0" style="border:1px solid #777777;margin:0 0 4px 0;">
+                    <div class="col-4 pt-1 pb-1 text-left px-2">
+                        <span t-if="company.name"><b><span t-esc="company.name"/></b><br/></span>
+                        <span t-if="company.street"><span t-esc="company.street"/><br/></span>
+                        <span t-if="company.street2"><span t-esc="company.street2"/><br/></span>
+                        <span t-if="company.city or company.zip">
+                            <span t-esc="company.city"/>
+                            <span t-esc="company.zip"/><br/>
+                        </span>
+                        <span t-if="company.country_id"><span t-esc="company.country_id.name"/></span>
+                    </div>
+                    <div class="col-4 text-center d-flex justify-content-center align-items-center pt-1">
+                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"
+                            style="width:100%;max-width:100%;object-fit:contain;height:80px;"/>
+                    </div>
+                    <div class="col-4 pt-1 pb-1 px-2" style="text-align:right;">
+                        <span t-if="company.sh_name"><b><span t-esc="company.sh_name"/></b><br/></span>
+                        <span t-if="company.sh_street"><span t-esc="company.sh_street"/><br/></span>
+                        <span t-if="company.sh_street2"><span t-esc="company.sh_street2"/><br/></span>
+                        <span t-if="company.sh_city or company.sh_zip">
+                            <span t-esc="company.sh_city"/>
+                            <span t-esc="company.sh_zip"/><br/>
+                        </span>
+                        <span t-if="company.sh_country_id"><span t-esc="company.sh_country_id"/></span>
+                    </div>
+                </div>
 
                 <div class="row mt-1">
                     <div class="col-12 pl-0 pr-0">
@@ -142,22 +200,22 @@
                     <div class="col-6 pl-0">
                         <table class="table table-bordered sultan-table">
                             <tr>
-                                <td colspan="3" class="sultan-static" style="height:22px;text-align:center;">Receiver Information / بيانات المستلم</td>
+                                <td colspan="3" class="sultan-static" style="height:22px;text-align:center;background:#DEDEDE !important;font-weight:bold !important;">Receiver Information / بيانات المستلم</td>
                             </tr>
                             <tr>
-                                <td class="sultan-static" style="width:34%;height:22px;text-align:left;">Receiver Name</td>
+                                <td class="sultan-static" style="width:34%;height:22px;text-align:left;background:#DEDEDE !important;font-weight:bold !important;">Receiver Name</td>
                                 <td class="sultan-value" style="width:32%;height:22px;text-align:center;"><span t-field="o.receiver_name"/></td>
-                                <td class="sultan-static" style="width:34%;height:22px;text-align:right;">اسم المستلم</td>
+                                <td class="sultan-static" style="width:34%;height:22px;text-align:right;background:#DEDEDE !important;font-weight:bold !important;">اسم المستلم</td>
                             </tr>
                             <tr>
-                                <td class="sultan-static" style="height:22px;text-align:left;">Receiver Phone</td>
+                                <td class="sultan-static" style="height:22px;text-align:left;background:#DEDEDE !important;font-weight:bold !important;">Receiver Phone</td>
                                 <td class="sultan-value" style="height:22px;text-align:center;"><span t-field="o.receiver_phone"/></td>
-                                <td class="sultan-static" style="height:22px;text-align:right;">هاتف المستلم</td>
+                                <td class="sultan-static" style="height:22px;text-align:right;background:#DEDEDE !important;font-weight:bold !important;">هاتف المستلم</td>
                             </tr>
                             <tr>
-                                <td class="sultan-static" style="height:22px;text-align:left;">Legal ID Number</td>
+                                <td class="sultan-static" style="height:22px;text-align:left;background:#DEDEDE !important;font-weight:bold !important;">Legal ID Number</td>
                                 <td class="sultan-value" style="height:22px;text-align:center;"><span t-field="o.receiver_legal_id"/></td>
-                                <td class="sultan-static" style="height:22px;text-align:right;">رقم الهوية</td>
+                                <td class="sultan-static" style="height:22px;text-align:right;background:#DEDEDE !important;font-weight:bold !important;">رقم الهوية</td>
                             </tr>
                         </table>
                     </div>

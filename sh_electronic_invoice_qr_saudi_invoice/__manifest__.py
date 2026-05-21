@@ -16,10 +16,10 @@
             'views/res_company_views.xml',
             'views/res_partner_views.xml',
             'views/account_move_views.xml',
+            'report/invoice_external_layout_templates.xml',
             'report/invoice_report_templates.xml',
             'report/account_simplified_report_templates.xml',
             'report/account_move_report_action.xml',
-            'report/invoice_external_layout_templates.xml',
             ],
     "external_dependencies": {
         "python": ["qrcode"],
