@@ -13,6 +13,11 @@
                 <field name="amount_in_words" invisible="1" />
                 <field name="amount_in_words_ar" invisible="1" />
             </field>
+            <xpath expr="//group[@id='header_left_group']/field[@name='partner_shipping_id']" position="after">
+                <field name="receiver_name" invisible="move_type not in ('out_invoice', 'out_refund')" />
+                <field name="receiver_phone" invisible="move_type not in ('out_invoice', 'out_refund')" />
+                <field name="receiver_legal_id" invisible="move_type not in ('out_invoice', 'out_refund')" />
+            </xpath>
             <xpath
                 expr="//form/sheet/notebook/page/field[@name='invoice_line_ids']/list/field[@name='name']"
                 position="after">

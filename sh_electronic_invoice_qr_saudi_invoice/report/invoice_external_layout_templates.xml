@@ -2,6 +2,28 @@
 <odoo>
     <data>
 
+        <template id="sultan_invoice_layout">
+            <t t-if="not o" t-set="o" t-value="doc" />
+            <div t-attf-class="article o_report_layout_standard o_company_#{o.company_id.id}_layout"
+                t-att-data-oe-model="o and o._name"
+                t-att-data-oe-id="o and o.id"
+                t-att-data-oe-lang="o and o.env.context.get('lang')">
+                <t t-raw="0" />
+            </div>
+        </template>
+
+        <template id="hide_standard_invoice_header" inherit_id="web.external_layout_standard" priority="99">
+            <xpath expr="//div[contains(@t-attf-class, 'header o_company_')]" position="attributes">
+                <attribute name="t-if">not (o and o._name == 'account.move')</attribute>
+            </xpath>
+            <xpath expr="//t[@t-call='web.address_layout']" position="attributes">
+                <attribute name="t-if">not (o and o._name == 'account.move')</attribute>
+            </xpath>
+            <xpath expr="//h2[@t-out='layout_document_title']" position="attributes">
+                <attribute name="t-if">not (o and o._name == 'account.move')</attribute>
+            </xpath>
+        </template>
+
         <template id="sh_external_layout_standard">
             <style type="text/css">
                     .sh-static-info,
