@@ -20,13 +20,13 @@
 
     <template id="hide_standard_delivery_header" inherit_id="web.external_layout_standard" priority="99">
         <xpath expr="//div[contains(@t-attf-class, 'header o_company_')]" position="attributes">
-            <attribute name="t-if">not (o and o._name == 'stock.picking')</attribute>
+            <attribute name="t-if">not (o and o._name in ('account.move', 'stock.picking'))</attribute>
         </xpath>
         <xpath expr="//t[@t-call='web.address_layout']" position="attributes">
-            <attribute name="t-if">not (o and o._name == 'stock.picking')</attribute>
+            <attribute name="t-if">not (o and o._name in ('account.move', 'stock.picking'))</attribute>
         </xpath>
         <xpath expr="//h2[@t-out='layout_document_title']" position="attributes">
-            <attribute name="t-if">not (o and o._name == 'stock.picking')</attribute>
+            <attribute name="t-if">not (o and o._name in ('account.move', 'stock.picking'))</attribute>
         </xpath>
     </template>
 
