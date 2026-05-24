@@ -319,7 +319,7 @@
                             </td>
                             <td
                                 style="text-align: Center;padding: 2px 2px; border: 1px solid #777777; border-left:0; text-align:right;"
-                                t-esc="o.amount_untaxed"
+                                t-esc="o.amount_total"
                                 t-options='{"widget": "monetary", "display_currency": o.currency_id}'
                                 class="border-left-0">
 
