@@ -359,6 +359,22 @@
 
                             </td>
                         </tr>
+                        <tr>
+                            <th scope="row"
+                                style="text-align: Center;padding: 2px 10px; text-align:left; border: 1px solid #777777;">Total
+                                Inoivce total amount (Incl Tax)</th>
+                            <td
+                                style="text-align: Center;padding: 2px 2px; border: 1px solid #777777; border-left:0;">
+                                إحمالي الفاتورة مع الضريبة
+                            </td>
+                            <td
+                                style="text-align: Center;padding: 2px 2px; border: 1px solid #777777; border-left:0; text-align:right;"
+                                t-esc="o.amount_residual"
+                                t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                class="border-left-0">
+
+                            </td>
+                        </tr>
                     </table>
                 </div>
             </div>
