@@ -33,10 +33,10 @@ class AccountMove(models.Model):
         res =  super()._get_name_invoice_report()
         return 'account.report_invoice_document'
 
-    @api.depends('amount_total')
+    @api.depends('amount_total_signed')
     def amount_word(self):
         """Convert amount into words"""
-        total_amount = self.amount_residual
+        total_amount = self.amount_total_signed
         self.ensure_one()
         amount_str = str('{:2f}'.format(total_amount))
         amount_str_splt = amount_str.split('.')
