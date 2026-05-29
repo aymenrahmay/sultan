@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="helpdesk_ticket_view_form_inherit_sultan" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherit.sultan</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id' and contains(@class, 'field_user_id')]" position="after">
+                <field name="create_uid" string="Created By" readonly="1"/>
+            </xpath>
+            <xpath expr="//sheet/group[@class='mb-0 mt-4']" position="after">
+                <group string="Vehicle Information" name="sultan_vehicle_information" col="4">
+                    <field name="fleet_vehicle_id" required="1"/>
+                    <field name="opening_ticket_km" required="1"/>
+                    <field name="vin_sn" readonly="1"/>
+                    <field name="odometer" readonly="1"/>
+                    <field name="fuel_type" readonly="1"/>
+                    <field name="vehicle_type" readonly="1"/>
+                    <field name="model_year" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
