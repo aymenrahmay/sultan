@@ -412,6 +412,26 @@
                 </div>
             </t>
 
+            <div t-if="o.narration" class="row mt-2" style="page-break-inside: avoid;">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0 pr-0">
+                    <table class="table table-bordered sultan-table" style="font-size:10px;margin-bottom:0;">
+                        <tr style="background:#DEDEDE;">
+                            <td class="sultan-static" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:left;padding:2px 8px;">
+                                Terms and Conditions
+                            </td>
+                            <td class="sultan-static" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:right;padding:2px 8px;">
+                                الشروط والأحكام
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="border:1px solid #777777;padding:6px 8px;font-size:11px;line-height:1.4;">
+                                <span t-field="o.narration" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
             <div class="row mt-4" style="page-break-inside:avoid;">
                     <div class="col-6 pl-0">
                         <table class="table table-bordered sultan-table">
