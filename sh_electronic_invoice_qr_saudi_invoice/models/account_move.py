@@ -30,8 +30,7 @@ class AccountMove(models.Model):
     def _get_name_invoice_report(self):
         """Calls the report template"""
         self.ensure_one()
-        res =  super()._get_name_invoice_report()
-        return 'account.report_invoice_document'
+        return 'sh_electronic_invoice_qr_saudi_invoice.inherit_report_invoice_document'
 
     @api.depends('amount_total_signed')
     def amount_word(self):

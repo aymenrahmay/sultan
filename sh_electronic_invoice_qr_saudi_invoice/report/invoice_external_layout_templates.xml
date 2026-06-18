@@ -4,7 +4,56 @@
 
         <template id="sultan_invoice_layout">
             <t t-if="not o" t-set="o" t-value="doc" />
-            <div t-attf-class="article o_report_layout_standard o_company_#{o.company_id.id}_layout"
+            <style type="text/css">
+                .sultan-readable-report,
+                .sultan-readable-report .row,
+                .sultan-readable-report address {
+                    font-size: 12px !important;
+                    line-height: 1.25 !important;
+                }
+                .sultan-readable-report .sh-label-table,
+                .sultan-readable-report .sh-label-table th,
+                .sultan-readable-report .sh-label-table td,
+                .sultan-readable-report .sh-total-table,
+                .sultan-readable-report .sh-total-table th,
+                .sultan-readable-report .sh-total-table td,
+                .sultan-readable-report .sh-terms-table,
+                .sultan-readable-report .sh-terms-table th,
+                .sultan-readable-report .sh-terms-table td,
+                .sultan-readable-report .sultan-table,
+                .sultan-readable-report .sultan-table th,
+                .sultan-readable-report .sultan-table td,
+                .sultan-readable-report table[name="invoice_snln_table"],
+                .sultan-readable-report table[name="invoice_snln_table"] th,
+                .sultan-readable-report table[name="invoice_snln_table"] td,
+                .sultan-standard-invoice .sh-line-items,
+                .sultan-standard-invoice .sh-line-items th,
+                .sultan-standard-invoice .sh-line-items td {
+                    font-size: 12px !important;
+                    line-height: 1.25 !important;
+                }
+                .sultan-readable-report span {
+                    font-size: inherit !important;
+                }
+                .sultan-readable-report .sh-static-info,
+                .sultan-readable-report .sh-static-info span,
+                .sultan-readable-report .sh-static-info td,
+                .sultan-readable-report .sh-label-table th,
+                .sultan-readable-report .sh-label-table td:first-child,
+                .sultan-readable-report .sh-label-table td:last-child,
+                .sultan-readable-report .sh-total-table th,
+                .sultan-readable-report .sh-total-table td:nth-child(2),
+                .sultan-readable-report .sultan-static,
+                .sultan-standard-invoice .sh-line-items tr:first-child th {
+                    font-size: 13px !important;
+                    line-height: 1.25 !important;
+                }
+                .sultan-readable-report h5 {
+                    font-size: 16px !important;
+                    line-height: 1.25 !important;
+                }
+            </style>
+            <div t-attf-class="article o_report_layout_standard sultan-readable-report sultan-standard-invoice o_company_#{o.company_id.id}_layout"
                 t-att-data-oe-model="o and o._name"
                 t-att-data-oe-id="o and o.id"
                 t-att-data-oe-lang="o and o.env.context.get('lang')">
@@ -26,6 +75,53 @@
 
         <template id="sh_external_layout_standard">
             <style type="text/css">
+                    .sultan-readable-report,
+                    .sultan-readable-report .row,
+                    .sultan-readable-report address {
+                        font-size: 12px !important;
+                        line-height: 1.25 !important;
+                    }
+                    .sultan-readable-report .sh-label-table,
+                    .sultan-readable-report .sh-label-table th,
+                    .sultan-readable-report .sh-label-table td,
+                    .sultan-readable-report .sh-total-table,
+                    .sultan-readable-report .sh-total-table th,
+                    .sultan-readable-report .sh-total-table td,
+                    .sultan-readable-report .sh-terms-table,
+                    .sultan-readable-report .sh-terms-table th,
+                    .sultan-readable-report .sh-terms-table td,
+                    .sultan-readable-report .sultan-table,
+                    .sultan-readable-report .sultan-table th,
+                    .sultan-readable-report .sultan-table td,
+                    .sultan-readable-report table[name="invoice_snln_table"],
+                    .sultan-readable-report table[name="invoice_snln_table"] th,
+                    .sultan-readable-report table[name="invoice_snln_table"] td,
+                    .sultan-standard-invoice .sh-line-items,
+                    .sultan-standard-invoice .sh-line-items th,
+                    .sultan-standard-invoice .sh-line-items td {
+                        font-size: 12px !important;
+                        line-height: 1.25 !important;
+                    }
+                    .sultan-readable-report span {
+                        font-size: inherit !important;
+                    }
+                    .sultan-readable-report .sh-static-info,
+                    .sultan-readable-report .sh-static-info span,
+                    .sultan-readable-report .sh-static-info td,
+                    .sultan-readable-report .sh-label-table th,
+                    .sultan-readable-report .sh-label-table td:first-child,
+                    .sultan-readable-report .sh-label-table td:last-child,
+                    .sultan-readable-report .sh-total-table th,
+                    .sultan-readable-report .sh-total-table td:nth-child(2),
+                    .sultan-readable-report .sultan-static,
+                    .sultan-standard-invoice .sh-line-items tr:first-child th {
+                        font-size: 13px !important;
+                        line-height: 1.25 !important;
+                    }
+                    .sultan-readable-report h5 {
+                        font-size: 16px !important;
+                        line-height: 1.25 !important;
+                    }
                     .sh-static-info,
                     .sh-label-table tr > th,
                     .sh-label-table tr > td:first-child,
@@ -37,7 +133,7 @@
                         font-weight:bold !important;
                     }
             </style>
-            <div class="header" style="font-size: 12px;">
+            <div class="header sultan-readable-report" style="font-size: 12px;">
                 <div class="row" style="border:1px solid #777777;">
                     <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 pt-1 pb-1 text-left px-2">
                         <span t-if="company.name">
@@ -138,7 +234,7 @@
                 </div>
             </div>
 
-            <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout"
+            <div t-attf-class="article o_report_layout_standard sultan-readable-report o_company_#{company.id}_layout"
                 t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id"
                 t-att-data-oe-lang="o and o.env.context.get('lang')">
                 <t t-raw="0" />

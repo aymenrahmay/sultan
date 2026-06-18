@@ -3,9 +3,11 @@
     <record id="account.account_invoices" model="ir.actions.report">
         <field name="paperformat_id"
             ref="sh_electronic_invoice_qr_saudi_invoice.paperformat_custom_saudi" />
+        <field name="attachment_use">False</field>
     </record>
     <template id="report_invoice_use_sultan_document" inherit_id="account.report_invoice" priority="99">
         <xpath expr="//t[@t-call='account.report_invoice_document']" position="attributes">
+            <attribute name="t-if">o._get_name_invoice_report() == 'sh_electronic_invoice_qr_saudi_invoice.inherit_report_invoice_document'</attribute>
             <attribute name="t-call">sh_electronic_invoice_qr_saudi_invoice.inherit_report_invoice_document</attribute>
         </xpath>
     </template>
@@ -26,7 +28,7 @@
 
         <xpath expr="//div[hasclass('page')]" position="before">
             <t t-set="company" t-value="o.company_id.sudo() or res_company" />
-            <div class="row mt-0" style="font-size:12px;">
+            <div class="row mt-0" style="font-size: 13px;">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0 pr-0">
                     <div class="row" style="border:1px solid #777777;margin:0;">
                         <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 pt-1 pb-1 text-left px-2">
@@ -76,7 +78,7 @@
                     <div class="row" style="margin:0;">
                         <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 pl-0 pr-0"
                             style="border:1px solid #777777;border-top:0;">
-                            <table class="table border-top-0 sh-label-table" style="margin-bottom:0;font-size:10px;">
+                            <table class="table border-top-0 sh-label-table" style="margin-bottom:0;font-size: 12px;">
                                 <tr>
                                     <td style="border-top:0;padding:1px 8px;">CR No.:</td>
                                     <td style="border-top:0;padding:1px 8px;">
@@ -89,7 +91,7 @@
 
                         <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 pl-0 pr-0"
                             style="border:1px solid #777777;border-left:0;border-top:0;">
-                            <table class="table border-top-0 sh-label-table" style="margin-bottom:0;font-size:10px;">
+                            <table class="table border-top-0 sh-label-table" style="margin-bottom:0;font-size: 12px;">
                                 <tr>
                                     <td style="border-top:0;padding:1px 8px;">VAT No.:</td>
                                     <td style="border-top:0;padding:1px 8px;">
@@ -107,23 +109,23 @@
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center pt-1 pb-1 sh-static-info"
                     style="background:#DEDEDE;border: 1px solid #777777;">
                     <t t-if="o.move_type == 'out_invoice'">
-                        <h5 style="margin-bottom: 0px;font-weight: bold;font-size: 12px;">Tax Invoice / فاتورة ضريبية</h5>
+                        <h5 style="margin-bottom: 0px;font-weight: bold;font-size: 16px;">Tax Invoice / فاتورة ضريبية</h5>
                     </t>
                     <t t-if="o.move_type == 'out_refund'">
-                        <h5 style="margin-bottom: 0px;font-weight: bold;font-size: 12px;">Credit Note / اشعار دائن</h5>
+                        <h5 style="margin-bottom: 0px;font-weight: bold;font-size: 16px;">Credit Note / اشعار دائن</h5>
                     </t>
                     <t t-if="o.move_type == 'in_invoice'">
-                        <h5 style="margin-bottom: 0px;font-weight: bold;font-size: 12px;">Bill /فاتورة مورد</h5>
+                        <h5 style="margin-bottom: 0px;font-weight: bold;font-size: 16px;">Bill /فاتورة مورد</h5>
                     </t>
                     <t t-if="o.move_type == 'out_refund'">
-                        <h5 style="margin-bottom: 0px;font-weight: bold;font-size: 12px;">Debit Note / مرتجع فاتورة</h5>
+                        <h5 style="margin-bottom: 0px;font-weight: bold;font-size: 16px;">Debit Note / مرتجع فاتورة</h5>
                     </t>
                 </div>
             </div>
 
             <div class="row mt-2">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0 pr-0">
-                    <table class="table table-bordered sh-label-table" style="font-size: 10px;table-layout:fixed;width:100%;">
+                    <table class="table table-bordered sh-label-table" style="font-size: 12px;table-layout:fixed;width:100%;">
                         <colgroup>
                             <col style="width:25%;" />
                             <col style="width:10%;" />
@@ -135,9 +137,9 @@
                             <col style="width:10%;" />
                         </colgroup>
                         <tr style="background:#DEDEDE;padding:1px">
-                                <th colspan="3" scope="row" style="font-weight: bold;font-size: 12px; text-align: left;padding: 2px 8px; border:1px solid #777777;border-right:0">Customer / العميل</th>
-                                <td colspan="3" style="font-weight: bold;font-size: 12px; text-align: right;padding: 2px 8px;border:1px solid #777777; border-left:0;">Invoice informations / بيانات الفاتورة</td>
-                                <td colspan="2" style="font-weight: bold;font-size: 12px; text-align: center;padding: 2px 8px;border:1px solid #777777; border-left:0;">QR</td>
+                                <th colspan="3" scope="row" style="font-weight: bold;font-size: 13px; text-align: left;padding: 2px 8px; border:1px solid #777777;border-right:0">Customer / العميل</th>
+                                <td colspan="3" style="font-weight: bold;font-size: 13px; text-align: right;padding: 2px 8px;border:1px solid #777777; border-left:0;">Invoice informations / بيانات الفاتورة</td>
+                                <td colspan="2" style="font-weight: bold;font-size: 13px; text-align: center;padding: 2px 8px;border:1px solid #777777; border-left:0;">QR</td>
                         </tr>
                         <tr>
                             <td colspan="3" rowspan="5" style="text-align: left;vertical-align:top;padding: 2px 8px; border:1px solid #777777;background:#FFFFFF !important;font-weight:normal !important;">
@@ -181,7 +183,7 @@
             </div>
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0 pr-0">
-                    <table class="table table-bordered sh-line-items" style="font-size: 10px;table-layout:fixed;width:100%;">
+                    <table class="table table-bordered sh-line-items" style="font-size: 12px;table-layout:fixed;width:100%;">
                         <colgroup>
                             <col style="width:25%;" />
                             <col style="width:10%;" />
@@ -193,14 +195,14 @@
                             <col style="width:10%;" />
                         </colgroup>
                         <tr style="background:#DEDEDE;">
-                            <th scope="row" style=" font-weight: bold;font-size: 12px; border:1px solid #777777;text-align: center;">Goods and services<br /> تفاصيل السلع و الخدمات </th>
-                            <th scope="row" style="font-weight: bold;font-size: 12px; border:1px solid #777777;text-align: center;">Unit Price<br /> سعر الوحدة </th>
-                            <th scope="row" style="font-weight: bold;font-size: 12px; border:1px solid #777777;text-align: center;"> Quantity<br /> كمية </th>
-                            <th scope="row" style="font-weight: bold;font-size: 12px; border:1px solid #777777;text-align: center;">Taxable Amount<br /> المبلغ الخاضع للضريبة </th>
-                            <th scope="row" style="font-weight: bold;font-size: 12px; border:1px solid #777777;text-align: center;"> Discount<br /> خصم </th>
-                            <th scope="row" style="font-weight: bold;font-size: 12px; border:1px solid #777777;text-align: center;">Tax Rate<br /> نسبة الضريبة </th>
-                            <th scope="row" style="font-weight: bold;font-size: 12px; border:1px solid #777777;text-align: center;">Tax Amount<br /> قيمة الضريبة </th>
-                            <th scope="row" style="font-weight: bold;font-size: 12px; border:1px solid #777777;text-align: center;">Subtotal (Including VAT)<br /> الإجمالي مع الضريبة </th>
+                            <th scope="row" style=" font-weight: bold;font-size: 13px; border:1px solid #777777;text-align: center;">Goods and services<br /> تفاصيل السلع و الخدمات </th>
+                            <th scope="row" style="font-weight: bold;font-size: 13px; border:1px solid #777777;text-align: center;">Unit Price<br /> سعر الوحدة </th>
+                            <th scope="row" style="font-weight: bold;font-size: 13px; border:1px solid #777777;text-align: center;"> Quantity<br /> كمية </th>
+                            <th scope="row" style="font-weight: bold;font-size: 13px; border:1px solid #777777;text-align: center;">Taxable Amount<br /> المبلغ الخاضع للضريبة </th>
+                            <th scope="row" style="font-weight: bold;font-size: 13px; border:1px solid #777777;text-align: center;"> Discount<br /> خصم </th>
+                            <th scope="row" style="font-weight: bold;font-size: 13px; border:1px solid #777777;text-align: center;">Tax Rate<br /> نسبة الضريبة </th>
+                            <th scope="row" style="font-weight: bold;font-size: 13px; border:1px solid #777777;text-align: center;">Tax Amount<br /> قيمة الضريبة </th>
+                            <th scope="row" style="font-weight: bold;font-size: 13px; border:1px solid #777777;text-align: center;">Subtotal (Including VAT)<br /> الإجمالي مع الضريبة </th>
                         </tr>
 
                         <t t-set="lines"
@@ -267,14 +269,14 @@
 
             <div class="row mt-2 border" style="page-break-inside: avoid;">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 sh-static-info"  style="background:#DEDEDE; border: 1px solid #777777; padding:0px 10px;">
-                    <span style="margin-bottom: 1px;font-weight: bold;font-size: 12px;">Total Amounts </span>
-                    <span style="margin-bottom: 1px;font-weight: bold;font-size: 12px;float:right">المبلغ الإجمالي  </span>
+                    <span style="margin-bottom: 1px;font-weight: bold;font-size: 13px;">Total Amounts </span>
+                    <span style="margin-bottom: 1px;font-weight: bold;font-size: 13px;float:right">المبلغ الإجمالي  </span>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0 pr-0">
-                    <table class="table table-bordered sh-total-table" style="font-size: 10px;">
+                    <table class="table table-bordered sh-total-table" style="font-size: 12px;">
                         <tr>
                             <th scope="row"
                                 style="text-align: Center;padding: 2px 10px;  border: 1px solid #777777; text-align:left;">Total
@@ -344,33 +346,33 @@
                 </div>
             </div>
             <div class="row mt-1 border"
-                style="font-size:10px margin-top:2px; page-break-inside: avoid; ">
+                style="font-size: 12px; margin-top:2px; page-break-inside: avoid; ">
                 <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 sh-static-info"
                     style="background:#DEDEDE; border:1px solid #777777; ">
                     <span
-                        style="margin-bottom: 0px;font-weight: bold;font-size: 12px; padding:0px 10px; text-transform:capitalized;">Invoiced
+                        style="margin-bottom: 0px;font-weight: bold;font-size: 13px; padding:0px 10px; text-transform:capitalized;">Invoiced
                         Amount
                     </span>
                 </div>
                 <div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8"
                     style=" border:1px solid #777777;border-left:0px;">
-                    <span style="margin-bottom: 0px;font-size: 12px; padding:2px 0px;">
+                    <span style="margin-bottom: 0px;font-size: 13px; padding:2px 0px;">
                         <t t-esc="o.amount_in_words" />
                     </span>
                 </div>
             </div>
-            <div class="row mt-1 border" style="font-size:10px  margin-bottom:5px; ">
+            <div class="row mt-1 border" style="font-size: 12px; margin-bottom:5px; ">
                 <div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8"
                     style="border:1px solid #777777;">
                     <span
-                        style="margin-bottom: 0px;font-size: 12px;text-align: right;padding:2px 0px;float:right">
+                        style="margin-bottom: 0px;font-size: 13px;text-align: right;padding:2px 0px;float:right">
                         <t t-esc="o.amount_in_words_ar" />
                     </span>
                 </div>
                 <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 sh-static-info"
                     style="background:#DEDEDE; border:1px solid #777777; border-left:0px;">
                     <span
-                        style="margin-bottom: 0px;font-weight: bold;font-size: 12px;text-align: right;padding:2px 0px;">المبلغ
+                        style="margin-bottom: 0px;font-weight: bold;font-size: 13px;text-align: right;padding:2px 0px;">المبلغ
                         المفوتر
                     </span>
                 </div>
@@ -380,7 +382,7 @@
                 <t t-set="lot_values" t-value="o._get_invoiced_lot_values()" />
                 <div t-if="lot_values" class="row mt-2" style="page-break-inside: avoid;">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0 pr-0">
-                        <table class="table table-bordered" name="invoice_snln_table" style="font-size: 10px;table-layout:fixed;width:100%;">
+                        <table class="table table-bordered" name="invoice_snln_table" style="font-size: 12px;table-layout:fixed;width:100%;">
                             <colgroup>
                                 <col style="width:50%;" />
                                 <col style="width:20%;" />
@@ -388,9 +390,9 @@
                             </colgroup>
                             <thead>
                                 <tr style="background:#DEDEDE;">
-                                    <th scope="row" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:center;">Product<br />المنتج</th>
-                                    <th scope="row" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:center;">Quantity<br />الكمية</th>
-                                    <th scope="row" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:center;">Serial / Lot Number<br />الرقم التسلسلي / الدفعة</th>
+                                    <th scope="row" style="font-weight:bold;font-size: 13px;border:1px solid #777777;text-align:center;">Product<br />المنتج</th>
+                                    <th scope="row" style="font-weight:bold;font-size: 13px;border:1px solid #777777;text-align:center;">Quantity<br />الكمية</th>
+                                    <th scope="row" style="font-weight:bold;font-size: 13px;border:1px solid #777777;text-align:center;">Serial / Lot Number<br />الرقم التسلسلي / الدفعة</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -414,20 +416,20 @@
 
             <div t-if="o.narration" class="row mt-2" style="page-break-inside: avoid;">
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0 pr-0">
-                    <table class="table table-bordered sultan-table" style="font-size:10px;margin-bottom:0;">
+                    <table class="table table-bordered sultan-table" style="font-size: 12px;margin-bottom:0;">
                         <tr style="background:#DEDEDE;">
-                            <td class="sultan-static" style="width:50%;font-weight:bold;font-size:12px;border:1px solid #777777;text-align:left;padding:2px 8px;">
+                            <td class="sultan-static" style="width:50%;font-weight:bold;font-size: 13px;border:1px solid #777777;text-align:left;padding:2px 8px;">
                                 Terms and Conditions
                             </td>
-                            <td class="sultan-static" style="width:50%;font-weight:bold;font-size:12px;border:1px solid #777777;text-align:right;padding:2px 8px;">
+                            <td class="sultan-static" style="width:50%;font-weight:bold;font-size: 13px;border:1px solid #777777;text-align:right;padding:2px 8px;">
                                 الشروط والأحكام
                             </td>
                         </tr>
                         <tr>
-                            <td style="width:50%;vertical-align:top;border:1px solid #777777;padding:6px 8px;font-size:11px;line-height:1.4;">
+                            <td style="width:50%;vertical-align:top;border:1px solid #777777;padding:6px 8px;font-size: 12px;line-height:1.4;">
                                 <span t-field="o.narration" />
                             </td>
-                            <td dir="rtl" style="width:50%;vertical-align:top;border:1px solid #777777;padding:6px 8px;font-size:11px;line-height:1.4;text-align:right;">
+                            <td dir="rtl" style="width:50%;vertical-align:top;border:1px solid #777777;padding:6px 8px;font-size: 12px;line-height:1.4;text-align:right;">
                                 <span t-field="o.with_context(lang='ar_001').narration" />
                             </td>
                         </tr>
@@ -439,22 +441,22 @@
                     <div class="col-6 pl-0">
                         <table class="table table-bordered sultan-table">
                             <tr style="background:#DEDEDE;">
-                                <td colspan="3" class="sultan-static" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:center;">Receiver Information / بيانات المستلم</td>
+                                <td colspan="3" class="sultan-static" style="font-weight:bold;font-size: 13px;border:1px solid #777777;text-align:center;">Receiver Information / بيانات المستلم</td>
                             </tr>
                             <tr>
-                                <td class="sultan-static" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:center; background:#DEDEDE;">Receiver Name</td>
+                                <td class="sultan-static" style="font-weight:bold;font-size: 13px;border:1px solid #777777;text-align:center; background:#DEDEDE;">Receiver Name</td>
                                 <td class="sultan-value" style="width:32%;height:22px;text-align:center;"><span t-field="o.receiver_name"/></td>
-                                <td class="sultan-static" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:center; background:#DEDEDE;">إسم المستلم</td>
+                                <td class="sultan-static" style="font-weight:bold;font-size: 13px;border:1px solid #777777;text-align:center; background:#DEDEDE;">إسم المستلم</td>
                             </tr>
                             <tr>
-                                <td class="sultan-static" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:center; background:#DEDEDE;">Receiver Phone</td>
+                                <td class="sultan-static" style="font-weight:bold;font-size: 13px;border:1px solid #777777;text-align:center; background:#DEDEDE;">Receiver Phone</td>
                                 <td class="sultan-value" style="height:22px;text-align:center;"><span t-field="o.receiver_phone"/></td>
-                                <td class="sultan-static" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:center;">رقم هاتف المستلم</td>
+                                <td class="sultan-static" style="font-weight:bold;font-size: 13px;border:1px solid #777777;text-align:center;">رقم هاتف المستلم</td>
                             </tr>
                             <tr>
-                                <td class="sultan-static" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:center; background:#DEDEDE;">Legal ID Number</td>
+                                <td class="sultan-static" style="font-weight:bold;font-size: 13px;border:1px solid #777777;text-align:center; background:#DEDEDE;">Legal ID Number</td>
                                 <td class="sultan-value" style="height:22px;text-align:center;"><span t-field="o.receiver_legal_id"/></td>
-                                <td class="sultan-static" style="font-weight:bold;font-size:12px;border:1px solid #777777;text-align:center; background:#DEDEDE;">رقم الهوية</td>
+                                <td class="sultan-static" style="font-weight:bold;font-size: 13px;border:1px solid #777777;text-align:center; background:#DEDEDE;">رقم الهوية</td>
                             </tr>
                         </table>
                     </div>

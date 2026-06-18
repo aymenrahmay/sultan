@@ -10,7 +10,7 @@
             <field name="report_name">sh_electronic_invoice_qr_saudi_invoice.report_simplified_invoice_action</field>
             <field name="report_file">sh_electronic_invoice_qr_saudi_invoice.report_simplified_invoice_action</field>
             <field name="attachment">'simplified_tax_invoice.pdf'</field>
-            <field name="attachment_use">True</field>
+            <field name="attachment_use">False</field>
         </record>
 
     </data>
