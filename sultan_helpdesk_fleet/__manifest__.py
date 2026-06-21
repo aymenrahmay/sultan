@@ -6,7 +6,7 @@
     "summary": "Sultan helpdesk",
     "author": "Sultan",
     "license": "LGPL-3",
-    "depends": ["helpdesk", "fleet"],
+    "depends": ["helpdesk", "fleet", "hr_attendance"],
     "data": [
         "views/helpdesk_ticket_views.xml",
     ],
