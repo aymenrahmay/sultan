@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="ir_config_parameter_supported_cloud_storage_models" model="ir.config_parameter">
+        <field name="key">sultan_cloud_storage_supported_models.supported_models</field>
+        <field name="value">account.bank.statement,
+account.bank.statement.line,
+account.move,
+account.payment,
+account.return,
+approval.request,
+documents.document,
+documents.mixin,
+extract.mixin,
+extract.mixin.with.words,
+fleet.vehicle,
+hr.applicant,
+hr.employee,
+hr.expense,
+hr.leave,
+hr.payslip,
+hr.version,
+mail.thread.main.attachment,
+product.product,
+product.template,
+sign.request</field>
+    </record>
+</odoo>
