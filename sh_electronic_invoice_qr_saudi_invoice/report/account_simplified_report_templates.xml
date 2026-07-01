@@ -92,6 +92,16 @@
                                         الدفع
                                     </td>
                                 </tr>
+                                <tr>
+                                    <th scope="row"
+                                        style="text-align: left;padding: 2px 8px; border:1px solid #777777;">Customer/Project reference</th>
+                                    <td
+                                        style="text-align: center;padding: 2px 8px; border:1px solid #777777; border-left:0;">
+                                        <t t-esc="o.ref" />
+                                    </td>
+                                    <td
+                                        style="text-align: right;padding: 2px 8px; border:1px solid #777777; border-left:0;">الرقم المرجعي - المشروع</td>
+                                </tr>
                             </table>
                         </div>
                         <div
