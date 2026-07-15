@@ -6,7 +6,7 @@
     "summary": "Allow selected attachment models to use Odoo cloud storage",
     "author": "Sultan",
     "license": "LGPL-3",
-    "depends": ["cloud_storage"],
+    "depends": ["account", "cloud_storage_migration"],
     "data": [
         "data/ir_config_parameter.xml",
     ],
