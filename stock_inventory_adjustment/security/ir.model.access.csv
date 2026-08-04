@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_qt_stock_inventory_user,qt.stock.inventory.user,model_qt_stock_inventory,group_stock_inventory_adjustment_user,1,0,0,0
+access_qt_stock_inventory_manager,qt.stock.inventory.manager,model_qt_stock_inventory,group_stock_inventory_adjustment_manager,1,1,1,1
+access_qt_stock_inventory_line_user,qt.stock.inventory.line.user,model_qt_stock_inventory_line,group_stock_inventory_adjustment_user,1,0,0,0
+access_qt_stock_inventory_line_manager,qt.stock.inventory.line.manager,model_qt_stock_inventory_line,group_stock_inventory_adjustment_manager,1,1,1,1
