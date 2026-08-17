@@ -61,8 +61,8 @@ class QtStockInventory(models.Model):
     def action_start(self):
         """Start inventory and generate lines."""
         Inventory = self.env[self._name]
-        if Inventory.search_count([('state', '=', 'in_progress'), ('id', 'not in', self.ids), ('location_id', '=', self.location_id.id)]):
-            raise UserError(self.env._("An inventory is already in progress for the selected location. Complete it before starting another."))
+        #if Inventory.search_count([('state', '=', 'in_progress'), ('id', 'not in', self.ids), ('location_id', '=', self.location_id.id)]):
+            #raise UserError(self.env._("An inventory is already in progress for the selected location. Complete it before starting another."))
         for inv in self:
             if inv.state != "draft":
                 raise UserError(self.env._("Only draft inventories can be started."))         
