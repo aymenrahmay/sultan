@@ -17,6 +17,7 @@ class QtStockInventoryLine(models.Model):
     difference_qty = fields.Float(string="Difference", compute="_compute_difference", store=True, digits="Product Unit of Measure")
     state = fields.Selection(related="inventory_id.state", store=True)
     company_id = fields.Many2one(related="inventory_id.company_id", store=True)
+    inventory_date = fields.Date(related="inventory_id.inventory_date", string="Counting Date", store=True, index=True)
     categ_id = fields.Many2one(comodel_name="product.category", related="product_id.categ_id", string="Category", store=True)
 
     @api.depends("theoretical_qty", "product_qty")

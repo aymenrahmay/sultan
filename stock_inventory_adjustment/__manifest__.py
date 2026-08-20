@@ -1,6 +1,6 @@
 {
     "name": "Stock Inventory Adjustment",
-    "version": "19.0.1.7.0",
+    "version": "19.0.1.8.0",
     "category": "Warehouse",
     "website": "https://odootips.com",
     "summary": """

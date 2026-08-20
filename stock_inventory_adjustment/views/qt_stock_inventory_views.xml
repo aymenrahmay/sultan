@@ -191,20 +191,78 @@
         <field name="model">qt.stock.inventory.line</field>
         <field name="arch" type="xml">
             <search>
+                <field name="inventory_id"/>
                 <field name="product_id"/>
+                <field name="categ_id"/>
                 <field name="lot_id" groups="stock.group_production_lot"/>
                 <field name="location_id" groups="stock.group_stock_multi_locations"/>
+                <field name="inventory_date"/>
                 <group>
+                    <filter name="validated" string="Validated" domain="[('state', '=', 'done')]"/>
                     <filter name="with_diff" string="With Difference" domain="[('difference_qty', '!=', 0)]"/>
                     <filter name="shortage" string="Shortages" domain="[('difference_qty', '&lt;', 0)]"/>
                     <filter name="surplus" string="Surpluses" domain="[('difference_qty', '&gt;', 0)]"/>
                 </group>
                 <group>
+                    <filter name="group_inventory" string="Inventory" context="{'group_by': 'inventory_id'}"/>
                     <filter name="group_product" string="Product" context="{'group_by': 'product_id'}"/>
                     <filter name="group_categ" string="Category" context="{'group_by': 'categ_id'}"/>
                     <filter name="group_location" string="Location" context="{'group_by': 'location_id'}"/>
+                    <filter name="group_date" string="Counting Date" context="{'group_by': 'inventory_date'}"/>
+                    <filter name="group_month" string="Counting Month" context="{'group_by': 'inventory_date:month'}"/>
+                    <filter name="group_state" string="State" context="{'group_by': 'state'}"/>
+                    <filter name="group_company" string="Company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
                 </group>
             </search>
+        </field>
+    </record>
+
+    <!-- Inventory Line Analysis -->
+    <record id="qt_stock_inventory_line_analysis_list" model="ir.ui.view">
+        <field name="name">qt.stock.inventory.line.analysis.list</field>
+        <field name="model">qt.stock.inventory.line</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0">
+                <field name="inventory_date"/>
+                <field name="inventory_id"/>
+                <field name="product_id"/>
+                <field name="categ_id" optional="show"/>
+                <field name="location_id" groups="stock.group_stock_multi_locations"/>
+                <field name="lot_id" groups="stock.group_production_lot" optional="show"/>
+                <field name="package_id" groups="stock.group_tracking_lot" optional="hide"/>
+                <field name="owner_id" groups="stock.group_tracking_owner" optional="hide"/>
+                <field name="theoretical_qty" sum="Total Theoretical"/>
+                <field name="product_qty" sum="Total Counted"/>
+                <field name="difference_qty" sum="Total Difference" decoration-danger="difference_qty &lt; 0" decoration-success="difference_qty &gt; 0"/>
+                <field name="state" widget="badge"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="qt_stock_inventory_line_pivot" model="ir.ui.view">
+        <field name="name">qt.stock.inventory.line.pivot</field>
+        <field name="model">qt.stock.inventory.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Inventory Line Analysis" sample="1">
+                <field name="categ_id" type="row"/>
+                <field name="product_id" type="row"/>
+                <field name="inventory_date" type="col" interval="month"/>
+                <field name="theoretical_qty" type="measure"/>
+                <field name="product_qty" type="measure"/>
+                <field name="difference_qty" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="qt_stock_inventory_line_graph" model="ir.ui.view">
+        <field name="name">qt.stock.inventory.line.graph</field>
+        <field name="model">qt.stock.inventory.line</field>
+        <field name="arch" type="xml">
+            <graph string="Inventory Line Analysis" type="bar" sample="1">
+                <field name="inventory_date" interval="month"/>
+                <field name="difference_qty" type="measure"/>
+            </graph>
         </field>
     </record>
 
@@ -226,6 +284,39 @@
         </field>
     </record>
 
+    <record id="action_qt_stock_inventory_line_analysis" model="ir.actions.act_window">
+        <field name="name">Inventory Line Analysis</field>
+        <field name="res_model">qt.stock.inventory.line</field>
+        <field name="view_mode">list,pivot,graph</field>
+        <field name="search_view_id" ref="qt_stock_inventory_line_search"/>
+        <field name="context">{'search_default_validated': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No inventory lines to analyze</p>
+            <p>Use the filters and group-by options to analyze counted quantities and differences.</p>
+        </field>
+    </record>
+
+    <record id="action_qt_stock_inventory_line_analysis_list_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="qt_stock_inventory_line_analysis_list"/>
+        <field name="act_window_id" ref="action_qt_stock_inventory_line_analysis"/>
+    </record>
+
+    <record id="action_qt_stock_inventory_line_analysis_pivot_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">pivot</field>
+        <field name="view_id" ref="qt_stock_inventory_line_pivot"/>
+        <field name="act_window_id" ref="action_qt_stock_inventory_line_analysis"/>
+    </record>
+
+    <record id="action_qt_stock_inventory_line_analysis_graph_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="3"/>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="qt_stock_inventory_line_graph"/>
+        <field name="act_window_id" ref="action_qt_stock_inventory_line_analysis"/>
+    </record>
+
     <!-- Menu -->
     <menuitem id="menu_qt_stock_inventory"
               name="Inventory Adjustments"
@@ -233,5 +324,12 @@
               action="action_qt_stock_inventory"
               sequence="20"
             />
+
+    <menuitem id="menu_qt_stock_inventory_line_analysis"
+              name="Inventory Line Analysis"
+              parent="stock.menu_stock_adjustments"
+              action="action_qt_stock_inventory_line_analysis"
+              sequence="21"
+              groups="stock_inventory_adjustment.group_stock_inventory_adjustment_user"/>
 
 </odoo>
