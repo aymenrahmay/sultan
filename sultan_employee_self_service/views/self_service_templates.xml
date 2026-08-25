@@ -86,6 +86,7 @@
         <t t-call="sultan_employee_self_service.layout">
             <a class="o_ss_back" href="/employee/self-service/dashboard">← Dashboard</a><h1>Personal Details</h1>
             <div t-if="message" class="o_ss_alert o_ss_alert_success" t-esc="message"/>
+            <div t-if="error" class="o_ss_alert o_ss_alert_error" t-esc="error"/>
             <section class="o_ss_panel o_ss_work_summary">
                 <h2>Work information</h2>
                 <div class="o_ss_detail_grid">
@@ -99,6 +100,27 @@
                     <div><small>Work Phone</small><strong t-esc="employee.work_phone or employee.mobile_phone or '—'"/></div>
                 </div>
                 <p class="o_ss_help">Work information is managed by Human Resources.</p>
+            </section>
+            <section class="o_ss_panel">
+                <h2>Bank accounts</h2>
+                <p class="o_ss_help">Add or update the account used for salary payments. New or changed accounts remain untrusted until reviewed by Human Resources.</p>
+                <div class="o_ss_bank_accounts">
+                    <form t-foreach="bank_accounts" t-as="account" action="/employee/self-service/profile/bank/save" method="post" class="o_ss_form o_ss_bank_card">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <input type="hidden" name="bank_account_id" t-att-value="account.id"/>
+                        <div class="o_ss_bank_heading"><strong>Bank account</strong><span class="o_ss_status" t-att-class="'o_ss_status state-validate' if account.allow_out_payment else 'o_ss_status'" t-esc="'Trusted' if account.allow_out_payment else 'Pending HR review'"/></div>
+                        <div class="o_ss_form_row"><label>Account holder name<input name="acc_holder_name" required="required" t-att-value="account.acc_holder_name or employee.legal_name or employee.name"/></label><label>Bank<select name="bank_id"><option value="">Choose a bank</option><option t-foreach="banks" t-as="bank" t-att-value="bank.id" t-att-selected="bank == account.bank_id and 'selected' or None" t-esc="bank.name"/></select></label></div>
+                        <label>Account number / IBAN<input name="acc_number" required="required" autocomplete="off" t-att-value="account.acc_number"/></label>
+                        <button class="o_ss_btn o_ss_btn_primary" type="submit">Update bank account</button>
+                    </form>
+                    <form action="/employee/self-service/profile/bank/save" method="post" class="o_ss_form o_ss_bank_card o_ss_bank_new">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <div class="o_ss_bank_heading"><strong>Add another bank account</strong></div>
+                        <div class="o_ss_form_row"><label>Account holder name<input name="acc_holder_name" required="required" t-att-value="employee.legal_name or employee.name"/></label><label>Bank<select name="bank_id"><option value="">Choose a bank</option><option t-foreach="banks" t-as="bank" t-att-value="bank.id" t-esc="bank.name"/></select></label></div>
+                        <label>Account number / IBAN<input name="acc_number" required="required" autocomplete="off" placeholder="Enter the full account number or IBAN"/></label>
+                        <button class="o_ss_btn o_ss_btn_primary" type="submit">Add bank account</button>
+                    </form>
+                </div>
             </section>
             <section class="o_ss_panel"><form action="/employee/self-service/profile" method="post" class="o_ss_form">
                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>

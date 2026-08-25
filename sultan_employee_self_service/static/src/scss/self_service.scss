@@ -42,4 +42,8 @@ $bg: #f3f7f6;
 .o_ss_form h2:first-of-type { margin-top: 0; padding-top: 0; border-top: 0; }
 .o_ss_form label.o_ss_checkbox { grid-template-columns: auto 1fr; align-items: center; align-self: end; min-height: 50px; }
 .o_ss_form label.o_ss_checkbox input { width: 20px; min-height: 20px; }
+.o_ss_bank_accounts { display: grid; gap: 16px; }
+.o_ss_bank_card { padding: 20px; border: 1px solid #dce8e5; border-radius: 14px; background: $bg; }
+.o_ss_bank_new { border-style: dashed; }
+.o_ss_bank_heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 @media (max-width: 720px) { .o_ss_header { align-items: flex-start; } .o_ss_employee { align-items: flex-end; flex-direction: column; gap: 2px; } .o_ss_container { width: calc(100% - 22px); padding-top: 20px; } .o_ss_welcome { align-items: stretch; flex-direction: column; } .o_ss_attendance { min-width: 0; } .o_ss_actions, .o_ss_two_columns, .o_ss_form_row { grid-template-columns: 1fr; } .o_ss_panel { padding: 18px; } }

@@ -1,7 +1,7 @@
 import hmac
 from datetime import timedelta
 
-from odoo import _, fields, http
+from odoo import Command, _, fields, http
 from odoo.exceptions import UserError, ValidationError
 from odoo.http import request
 
@@ -156,11 +156,10 @@ class EmployeeSelfService(http.Controller):
         return request.redirect("/employee/self-service/leaves?message=%s" % _("Your request was submitted."))
 
     @http.route("/employee/self-service/profile", type="http", auth="public", website=True, methods=["GET", "POST"], csrf=True, sitemap=False)
-    def profile(self, **post):
+    def profile(self, message=None, error=None, **post):
         employee, response = self._require_employee()
         if response:
             return response
-        message = False
         if request.httprequest.method == "POST":
             def clean(name):
                 return (post.get(name) or "").strip() or False
@@ -233,6 +232,44 @@ class EmployeeSelfService(http.Controller):
         return request.render("sultan_employee_self_service.profile", self._base_values(
             employee,
             message=message,
+            error=error,
             countries=request.env["res.country"].sudo().search([], order="name"),
             states=request.env["res.country.state"].sudo().search([], order="name"),
+            banks=request.env["res.bank"].sudo().search([], order="name"),
+            bank_accounts=employee.bank_account_ids.sudo(),
         ))
+
+    @http.route("/employee/self-service/profile/bank/save", type="http", auth="public", website=True, methods=["POST"], csrf=True, sitemap=False)
+    def bank_account_save(self, **post):
+        employee, response = self._require_employee()
+        if response:
+            return response
+        account_number = (post.get("acc_number") or "").strip()
+        if not account_number:
+            return self.profile(error=_("The bank account or IBAN is required."))
+        if not employee.work_contact_id:
+            return self.profile(error=_("No private contact is linked to your employee record. Please contact Human Resources."))
+
+        bank = request.env["res.bank"].sudo().browse(int(post.get("bank_id") or 0)).exists()
+        values = {
+            "acc_number": account_number,
+            "acc_holder_name": (post.get("acc_holder_name") or "").strip() or employee.legal_name or employee.name,
+            "bank_id": bank.id or False,
+        }
+        try:
+            account_id = int(post.get("bank_account_id") or 0)
+            account = employee.bank_account_ids.sudo().filtered(lambda item: item.id == account_id)
+            if account_id:
+                if not account:
+                    return request.not_found()
+                account.write(values)
+            else:
+                account = request.env["res.partner.bank"].sudo().create({
+                    **values,
+                    "partner_id": employee.work_contact_id.id,
+                    "allow_out_payment": False,
+                })
+                employee.sudo().write({"bank_account_ids": [Command.link(account.id)]})
+        except (UserError, ValidationError) as exc:
+            return self.profile(error=str(exc))
+        return request.redirect("/employee/self-service/profile?message=%s" % _("Your bank account was saved."))
