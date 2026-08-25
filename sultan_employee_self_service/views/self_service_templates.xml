@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="layout" name="Employee self-service layout">
+        <t t-call="website.layout">
+            <div id="wrap" class="o_ss_page">
+                <header class="o_ss_header" t-if="employee">
+                    <a href="/employee/self-service/dashboard" class="o_ss_brand">Employee Self-Service</a>
+                    <div class="o_ss_employee">
+                        <span t-esc="employee.name"/>
+                        <a href="/employee/self-service/logout">Sign out</a>
+                    </div>
+                </header>
+                <main class="o_ss_container"><t t-out="0"/></main>
+            </div>
+        </t>
+    </template>
+
+    <template id="login" name="Employee self-service login">
+        <t t-call="website.layout">
+            <div id="wrap" class="o_ss_login_page">
+                <section class="o_ss_login_card">
+                    <div class="o_ss_logo">S</div>
+                    <h1>Employee Self-Service</h1>
+                    <p>Enter your personal self-service code to continue.</p>
+                    <div t-if="error" class="o_ss_alert o_ss_alert_error" t-esc="error"/>
+                    <form method="post" action="/employee/self-service">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <label for="self_service_login">Self-service code</label>
+                        <input id="self_service_login" name="self_service_login" type="password" required="required" autofocus="autofocus" autocomplete="off" placeholder="Enter your code"/>
+                        <button type="submit" class="o_ss_btn o_ss_btn_primary">Continue</button>
+                    </form>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <template id="notices" name="Self-service notices">
+        <div t-if="message" class="o_ss_alert o_ss_alert_success" t-esc="message"/>
+        <div t-if="error" class="o_ss_alert o_ss_alert_error" t-esc="error"/>
+    </template>
+
+    <template id="dashboard" name="Employee self-service dashboard">
+        <t t-call="sultan_employee_self_service.layout">
+            <t t-call="sultan_employee_self_service.notices"/>
+            <section class="o_ss_welcome">
+                <div><span class="o_ss_eyebrow">Welcome</span><h1 t-esc="employee.name"/><p t-esc="employee.job_id.name or employee.department_id.name or 'Employee'"/></div>
+                <div class="o_ss_attendance" t-att-class="'o_ss_attendance is-in' if open_attendance else 'o_ss_attendance'">
+                    <span t-esc="'Checked in' if open_attendance else 'Checked out'"/>
+                    <small t-if="open_attendance">Since <t t-esc="open_attendance.check_in" t-options="{'widget': 'datetime', 'time_only': True}"/></small>
+                    <form action="/employee/self-service/attendance/toggle" method="post">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <button class="o_ss_btn" t-att-class="'o_ss_btn o_ss_btn_danger' if open_attendance else 'o_ss_btn o_ss_btn_success'" type="submit" t-esc="'Check out' if open_attendance else 'Check in'"/>
+                    </form>
+                </div>
+            </section>
+            <h2 class="o_ss_section_title">What would you like to do?</h2>
+            <div class="o_ss_actions">
+                <a href="/employee/self-service/leaves" class="o_ss_action"><span class="o_ss_icon">☀</span><strong>Time Off</strong><small>Balances and requests</small><b>Open →</b></a>
+                <a href="/employee/self-service/profile" class="o_ss_action"><span class="o_ss_icon">◉</span><strong>Personal Details</strong><small>Review and update information</small><b>Open →</b></a>
+            </div>
+            <section class="o_ss_panel"><h2>Available time off</h2><div class="o_ss_balances">
+                <div t-foreach="balances" t-as="balance" class="o_ss_balance"><strong t-esc="balance['record'].name"/><span t-if="balance['remaining'] is not None"><b t-esc="round(balance['remaining'], 2)"/> <small t-esc="'hours' if balance['unit'] == 'hour' else 'days'"/></span><span t-else="">No allocation required</span></div>
+            </div></section>
+        </t>
+    </template>
+
+    <template id="leaves" name="Employee self-service time off">
+        <t t-call="sultan_employee_self_service.layout">
+            <a class="o_ss_back" href="/employee/self-service/dashboard">← Dashboard</a><h1>Time Off</h1>
+            <t t-call="sultan_employee_self_service.notices"/>
+            <div class="o_ss_two_columns">
+                <section class="o_ss_panel"><h2>New request</h2><form action="/employee/self-service/leaves/create" method="post" class="o_ss_form">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <label>Time-off type<select name="leave_type_id" required="required"><option value="">Choose a type</option><option t-foreach="balances" t-as="balance" t-att-value="balance['record'].id" t-esc="balance['record'].name"/></select></label>
+                    <div class="o_ss_form_row"><label>From<input type="date" name="date_from" required="required" t-att-min="today"/></label><label>To<input type="date" name="date_to" required="required" t-att-min="today"/></label></div>
+                    <label>Reason<textarea name="description" rows="3" placeholder="Optional note"/></label>
+                    <button class="o_ss_btn o_ss_btn_primary" type="submit">Submit request</button>
+                </form></section>
+                <section class="o_ss_panel"><h2>Your balances</h2><div class="o_ss_balances"><div t-foreach="balances" t-as="balance" class="o_ss_balance"><strong t-esc="balance['record'].name"/><span t-if="balance['remaining'] is not None"><b t-esc="round(balance['remaining'], 2)"/> <small t-esc="'hours' if balance['unit'] == 'hour' else 'days'"/></span><span t-else="">Available</span></div></div></section>
+            </div>
+            <section class="o_ss_panel"><h2>Recent requests</h2><div class="o_ss_table_wrap"><table class="o_ss_table"><thead><tr><th>Type</th><th>Dates</th><th>Duration</th><th>Status</th></tr></thead><tbody><tr t-foreach="leaves" t-as="leave"><td t-esc="leave.holiday_status_id.name"/><td><t t-esc="leave.request_date_from"/> – <t t-esc="leave.request_date_to"/></td><td><t t-esc="round(leave.number_of_days, 2)"/> days</td><td><span class="o_ss_status" t-att-class="'o_ss_status state-' + leave.state" t-esc="dict(leave._fields['state'].selection).get(leave.state)"/></td></tr><tr t-if="not leaves"><td colspan="4">No requests yet.</td></tr></tbody></table></div></section>
+        </t>
+    </template>
+
+    <template id="profile" name="Employee self-service profile">
+        <t t-call="sultan_employee_self_service.layout">
+            <a class="o_ss_back" href="/employee/self-service/dashboard">← Dashboard</a><h1>Personal Details</h1>
+            <div t-if="message" class="o_ss_alert o_ss_alert_success" t-esc="message"/>
+            <section class="o_ss_panel o_ss_work_summary">
+                <h2>Work information</h2>
+                <div class="o_ss_detail_grid">
+                    <div><small>Employee</small><strong t-esc="employee.name"/></div>
+                    <div><small>Company</small><strong t-esc="employee.company_id.name or '—'"/></div>
+                    <div><small>Department</small><strong t-esc="employee.department_id.name or '—'"/></div>
+                    <div><small>Job Position</small><strong t-esc="employee.job_id.name or '—'"/></div>
+                    <div><small>Manager</small><strong t-esc="employee.parent_id.name or '—'"/></div>
+                    <div><small>Work Location</small><strong t-esc="employee.work_location_id.name or '—'"/></div>
+                    <div><small>Work Email</small><strong t-esc="employee.work_email or '—'"/></div>
+                    <div><small>Work Phone</small><strong t-esc="employee.work_phone or employee.mobile_phone or '—'"/></div>
+                </div>
+                <p class="o_ss_help">Work information is managed by Human Resources.</p>
+            </section>
+            <section class="o_ss_panel"><form action="/employee/self-service/profile" method="post" class="o_ss_form">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <h2>Contact information</h2>
+                <div class="o_ss_form_row"><label>Personal email<input type="email" name="private_email" t-att-value="employee.private_email or ''"/></label><label>Personal phone<input type="tel" name="private_phone" t-att-value="employee.private_phone or ''"/></label></div>
+
+                <h2>Personal information</h2>
+                <label>Legal name<input name="legal_name" t-att-value="employee.legal_name or ''"/></label>
+                <div class="o_ss_form_row"><label>Date of birth<input type="date" name="birthday" t-att-value="employee.birthday or ''"/></label><label class="o_ss_checkbox"><input type="checkbox" name="birthday_public_display" t-att-checked="employee.birthday_public_display and 'checked' or None"/> Show birthday to employees</label></div>
+                <div class="o_ss_form_row"><label>Place of birth<input name="place_of_birth" t-att-value="employee.place_of_birth or ''"/></label><label>Country of birth<select name="country_of_birth"><option value="">Choose a country</option><option t-foreach="countries" t-as="country" t-att-value="country.id" t-att-selected="country == employee.country_of_birth and 'selected' or None" t-esc="country.name"/></select></label></div>
+                <label>Gender<select name="sex"><option value="">Not specified</option><option value="male" t-att-selected="employee.sex == 'male' and 'selected' or None">Male</option><option value="female" t-att-selected="employee.sex == 'female' and 'selected' or None">Female</option><option value="other" t-att-selected="employee.sex == 'other' and 'selected' or None">Other</option></select></label>
+
+                <h2>Citizenship and identification</h2>
+                <div class="o_ss_form_row"><label>Nationality<select name="country_id"><option value="">Choose a country</option><option t-foreach="countries" t-as="country" t-att-value="country.id" t-att-selected="country == employee.country_id and 'selected' or None" t-esc="country.name"/></select></label><label>National identification number<input name="identification_id" t-att-value="employee.identification_id or ''"/></label></div>
+                <div class="o_ss_form_row"><label>Social security number<input name="ssnid" t-att-value="employee.ssnid or ''"/></label><label>Passport number<input name="passport_id" t-att-value="employee.passport_id or ''"/></label></div>
+                <label>Passport expiration date<input type="date" name="passport_expiration_date" t-att-value="employee.passport_expiration_date or ''"/></label>
+
+                <h2>Visa and work permit</h2>
+                <div class="o_ss_form_row"><label>Visa number<input name="visa_no" t-att-value="employee.visa_no or ''"/></label><label>Visa expiration date<input type="date" name="visa_expire" t-att-value="employee.visa_expire or ''"/></label></div>
+                <div class="o_ss_form_row"><label>Work permit number<input name="permit_no" t-att-value="employee.permit_no or ''"/></label><label>Work permit expiration date<input type="date" name="work_permit_expiration_date" t-att-value="employee.work_permit_expiration_date or ''"/></label></div>
+
+                <h2>Home address</h2>
+                <label>Street<input name="private_street" t-att-value="employee.private_street or ''"/></label><label>Address line 2<input name="private_street2" t-att-value="employee.private_street2 or ''"/></label>
+                <div class="o_ss_form_row"><label>City<input name="private_city" t-att-value="employee.private_city or ''"/></label><label>Postal code<input name="private_zip" t-att-value="employee.private_zip or ''"/></label></div>
+                <div class="o_ss_form_row"><label>Country<select name="private_country_id"><option value="">Choose a country</option><option t-foreach="countries" t-as="country" t-att-value="country.id" t-att-selected="country == employee.private_country_id and 'selected' or None" t-esc="country.name"/></select></label><label>State / Province<select name="private_state_id"><option value="">Choose a state</option><option t-foreach="states" t-as="state" t-att-value="state.id" t-att-data-country-id="state.country_id.id" t-att-selected="state == employee.private_state_id and 'selected' or None" t-esc="state.name"/></select></label></div>
+                <div class="o_ss_form_row"><label>Home-work distance<input type="number" min="0" name="distance_home_work" t-att-value="employee.distance_home_work or 0"/></label><label>Distance unit<select name="distance_home_work_unit"><option value="kilometers" t-att-selected="employee.distance_home_work_unit == 'kilometers' and 'selected' or None">Kilometers</option><option value="miles" t-att-selected="employee.distance_home_work_unit == 'miles' and 'selected' or None">Miles</option></select></label></div>
+
+                <h2>Emergency contact</h2><div class="o_ss_form_row"><label>Contact name<input name="emergency_contact" t-att-value="employee.emergency_contact or ''"/></label><label>Contact phone<input type="tel" name="emergency_phone" t-att-value="employee.emergency_phone or ''"/></label></div>
+
+                <h2>Family</h2>
+                <div class="o_ss_form_row"><label>Marital status<select name="marital"><option value="single" t-att-selected="employee.marital == 'single' and 'selected' or None">Single</option><option value="married" t-att-selected="employee.marital == 'married' and 'selected' or None">Married</option><option value="cohabitant" t-att-selected="employee.marital == 'cohabitant' and 'selected' or None">Legal Cohabitant</option><option value="widower" t-att-selected="employee.marital == 'widower' and 'selected' or None">Widower</option><option value="divorced" t-att-selected="employee.marital == 'divorced' and 'selected' or None">Divorced</option></select></label><label>Dependent children<input type="number" min="0" name="children" t-att-value="employee.children or 0"/></label></div>
+                <div class="o_ss_form_row"><label>Spouse legal name<input name="spouse_complete_name" t-att-value="employee.spouse_complete_name or ''"/></label><label>Spouse birthdate<input type="date" name="spouse_birthdate" t-att-value="employee.spouse_birthdate or ''"/></label></div>
+
+                <h2>Education</h2>
+                <div class="o_ss_form_row"><label>Certificate level<select name="certificate"><option value="">Not specified</option><option value="graduate" t-att-selected="employee.certificate == 'graduate' and 'selected' or None">Graduate</option><option value="bachelor" t-att-selected="employee.certificate == 'bachelor' and 'selected' or None">Bachelor</option><option value="master" t-att-selected="employee.certificate == 'master' and 'selected' or None">Master</option><option value="doctor" t-att-selected="employee.certificate == 'doctor' and 'selected' or None">Doctor</option><option value="other" t-att-selected="employee.certificate == 'other' and 'selected' or None">Other</option></select></label><label>Field of study<input name="study_field" t-att-value="employee.study_field or ''"/></label></div>
+                <label>School / University<input name="study_school" t-att-value="employee.study_school or ''"/></label>
+                <button class="o_ss_btn o_ss_btn_primary" type="submit">Save changes</button>
+            </form></section>
+        </t>
+    </template>
+</odoo>

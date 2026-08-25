@@ -1,0 +1,45 @@
+$primary: #176b5b;
+$ink: #18302c;
+$muted: #64746f;
+$surface: #fff;
+$bg: #f3f7f6;
+
+.o_ss_page, .o_ss_login_page { min-height: 100vh; background: $bg; color: $ink; font-family: Inter, system-ui, sans-serif; }
+.o_ss_header { min-height: 72px; padding: 14px 20px; background: $surface; border-bottom: 1px solid #dce8e5; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.o_ss_brand { color: $primary; font-size: 1.15rem; font-weight: 800; text-decoration: none; }
+.o_ss_employee { display: flex; align-items: center; gap: 14px; font-weight: 650; } .o_ss_employee a, .o_ss_back { color: $primary; }
+.o_ss_container { width: calc(100% - 32px); max-width: 1120px; margin: auto; padding: 34px 0 64px; }
+.o_ss_container h1 { font-size: clamp(1.7rem, 4vw, 2.4rem); font-weight: 800; margin: 8px 0 24px; }
+.o_ss_login_page { display: grid; place-items: center; padding: 20px; background: radial-gradient(circle at top, #d8eee9, $bg 55%); }
+.o_ss_login_card { width: 100%; max-width: 440px; background: white; border-radius: 24px; padding: clamp(28px, 6vw, 48px); box-shadow: 0 20px 60px #16493f1c; }
+.o_ss_login_card h1 { font-weight: 850; margin: 20px 0 8px; } .o_ss_login_card p { color: $muted; margin-bottom: 28px; }
+.o_ss_logo { width: 58px; height: 58px; display: grid; place-items: center; background: $primary; color: white; border-radius: 17px; font-size: 1.8rem; font-weight: 900; }
+.o_ss_form, .o_ss_login_card form { display: grid; gap: 18px; } .o_ss_form label, .o_ss_login_card label { display: grid; gap: 7px; font-weight: 700; }
+.o_ss_form input, .o_ss_form select, .o_ss_form textarea, .o_ss_login_card input { width: 100%; min-height: 50px; padding: 11px 14px; background: white; border: 1px solid #cbdad6; border-radius: 11px; color: $ink; font: inherit; }
+.o_ss_form textarea { resize: vertical; } .o_ss_form input:focus, .o_ss_form select:focus, .o_ss_login_card input:focus { outline: 3px solid #74b9aa55; border-color: $primary; }
+.o_ss_form_row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.o_ss_btn { min-height: 48px; padding: 11px 20px; border: 0; border-radius: 11px; font-weight: 800; cursor: pointer; }
+.o_ss_btn_primary { color: white; background: $primary; } .o_ss_btn_success { color: white; background: #16825f; } .o_ss_btn_danger { color: white; background: #b94141; }
+.o_ss_welcome { padding: clamp(24px, 5vw, 42px); border-radius: 22px; color: white; background: linear-gradient(120deg, #103c34, $primary); display: flex; align-items: center; justify-content: space-between; gap: 28px; }
+.o_ss_welcome h1 { margin: 3px 0; } .o_ss_welcome p { margin: 0; color: #d7eeea; } .o_ss_eyebrow { text-transform: uppercase; font-size: .75rem; letter-spacing: .12em; }
+.o_ss_attendance { min-width: 220px; background: #ffffff12; padding: 18px; border: 1px solid #ffffff30; border-radius: 16px; display: grid; gap: 8px; } .o_ss_attendance > span { font-size: 1.2rem; font-weight: 800; } .o_ss_attendance small { color: #d7eeea; }
+.o_ss_section_title { margin: 32px 0 16px; font-size: 1.25rem; font-weight: 800; }
+.o_ss_actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+.o_ss_action { padding: 24px; border: 1px solid #dce8e5; border-radius: 18px; background: white; color: $ink; text-decoration: none; display: grid; gap: 7px; transition: .18s ease; } .o_ss_action:hover { transform: translateY(-2px); box-shadow: 0 10px 30px #16493f12; color: $ink; } .o_ss_action strong { font-size: 1.2rem; } .o_ss_action small { color: $muted; } .o_ss_action b { color: $primary; margin-top: 8px; }
+.o_ss_icon { width: 46px; height: 46px; border-radius: 13px; background: #e5f3ef; color: $primary; display: grid; place-items: center; font-size: 1.4rem; }
+.o_ss_panel { margin-top: 22px; padding: clamp(20px, 4vw, 30px); background: white; border: 1px solid #dce8e5; border-radius: 18px; } .o_ss_panel h2 { font-size: 1.15rem; font-weight: 800; margin: 0 0 20px; }
+.o_ss_balances { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 12px; } .o_ss_balance { padding: 15px; background: $bg; border-radius: 12px; display: grid; gap: 8px; } .o_ss_balance span { color: $primary; } .o_ss_balance b { font-size: 1.4rem; }
+.o_ss_two_columns { display: grid; grid-template-columns: 1.2fr .8fr; gap: 20px; } .o_ss_two_columns .o_ss_panel { margin-top: 0; }
+.o_ss_alert { padding: 14px 16px; border-radius: 11px; margin: 0 0 18px; font-weight: 650; } .o_ss_alert_success { background: #daf3e8; color: #126047; } .o_ss_alert_error { background: #fbe3e3; color: #8d2929; }
+.o_ss_table_wrap { overflow-x: auto; } .o_ss_table { width: 100%; border-collapse: collapse; } .o_ss_table th, .o_ss_table td { padding: 13px 10px; text-align: left; border-bottom: 1px solid #e5eeec; white-space: nowrap; }
+.o_ss_status { display: inline-block; border-radius: 20px; padding: 5px 10px; background: #edf1f0; font-weight: 700; font-size: .83rem; } .o_ss_status.state-validate { background: #d9f2e6; color: #126047; } .o_ss_status.state-refuse, .o_ss_status.state-cancel { background: #fbe3e3; color: #8d2929; }
+.o_ss_back { display: inline-block; margin-bottom: 8px; font-weight: 700; text-decoration: none; }
+.o_ss_detail_grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
+.o_ss_detail_grid > div { display: grid; gap: 4px; padding: 14px; border-radius: 11px; background: $bg; }
+.o_ss_detail_grid small, .o_ss_help { color: $muted; }
+.o_ss_help { margin: 18px 0 0; }
+.o_ss_form h2 { margin-top: 18px; padding-top: 24px; border-top: 1px solid #e5eeec; }
+.o_ss_form h2:first-of-type { margin-top: 0; padding-top: 0; border-top: 0; }
+.o_ss_form label.o_ss_checkbox { grid-template-columns: auto 1fr; align-items: center; align-self: end; min-height: 50px; }
+.o_ss_form label.o_ss_checkbox input { width: 20px; min-height: 20px; }
+@media (max-width: 720px) { .o_ss_header { align-items: flex-start; } .o_ss_employee { align-items: flex-end; flex-direction: column; gap: 2px; } .o_ss_container { width: calc(100% - 22px); padding-top: 20px; } .o_ss_welcome { align-items: stretch; flex-direction: column; } .o_ss_attendance { min-width: 0; } .o_ss_actions, .o_ss_two_columns, .o_ss_form_row { grid-template-columns: 1fr; } .o_ss_panel { padding: 18px; } }

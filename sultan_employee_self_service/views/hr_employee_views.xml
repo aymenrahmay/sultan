@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_employee_view_form_self_service" model="ir.ui.view">
+        <field name="name">hr.employee.form.self.service</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='application_group']" position="after">
+                <group string="Employee Self-Service" name="employee_self_service_group" groups="hr.group_hr_user">
+                    <field name="self_service_enabled"/>
+                    <label for="self_service_login"/>
+                    <div class="o_row">
+                        <field name="self_service_login" placeholder="Generate or enter a unique code"/>
+                        <button name="action_generate_self_service_login"
+                                type="object"
+                                string="Generate Code"
+                                class="btn btn-link"/>
+                    </div>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
