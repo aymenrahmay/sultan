@@ -28,7 +28,7 @@ class HrEmployee(models.Model):
     @api.constrains("self_service_login")
     def _check_self_service_login(self):
         for employee in self:
-            if employee.self_service_login and len(employee.self_service_login.strip()) < 8:
+            if employee.self_service_login and len(employee.self_service_login.strip()) < 4:
                 raise ValidationError(_("The self-service login must contain at least 8 characters."))
 
     def action_generate_self_service_login(self):
