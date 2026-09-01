@@ -10,6 +10,6 @@ class ProductTemplate(models.Model):
     )
     vehicle_warranty_months = fields.Integer(
         string="Warranty (Months)",
-        default=36,
+        default=24,
         help="Default warranty duration starting from the customer delivery date.",
     )
