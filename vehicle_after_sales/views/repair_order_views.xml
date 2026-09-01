@@ -1,0 +1,18 @@
+<odoo>
+    <record id="repair_order_form_vehicle_after_sales" model="ir.ui.view">
+        <field name="name">repair.order.form.vehicle.after.sales</field>
+        <field name="model">repair.order</field>
+        <field name="inherit_id" ref="repair.view_repair_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group string="Vehicle Traceability" name="vehicle_traceability">
+                    <field name="vehicle_registry_id"/>
+                    <field name="vehicle_helpdesk_ticket_id"/>
+                    <field name="original_sale_order_id"/>
+                    <field name="original_delivery_id"/>
+                    <field name="warranty_end"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

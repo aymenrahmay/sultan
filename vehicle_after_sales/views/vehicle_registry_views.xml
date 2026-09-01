@@ -1,0 +1,73 @@
+<odoo>
+    <record id="vehicle_after_sales_registry_list" model="ir.ui.view">
+        <field name="name">vehicle.after.sales.registry.list</field>
+        <field name="model">vehicle.after.sales.registry</field>
+        <field name="arch" type="xml">
+            <list string="Vehicles / VINs">
+                <field name="vin"/>
+                <field name="product_id"/>
+                <field name="customer_id"/>
+                <field name="selling_company_id"/>
+                <field name="sale_order_id"/>
+                <field name="delivery_date"/>
+                <field name="warranty_end"/>
+                <field name="warranty_status" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="vehicle_after_sales_registry_form" model="ir.ui.view">
+        <field name="name">vehicle.after.sales.registry.form</field>
+        <field name="model">vehicle.after.sales.registry</field>
+        <field name="arch" type="xml">
+            <form string="Vehicle / VIN">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_repairs" type="object" class="oe_stat_button" icon="fa-wrench">
+                            <field name="repair_count" widget="statinfo" string="Repairs"/>
+                        </button>
+                    </div>
+                    <h1><field name="vin"/></h1>
+                    <group>
+                        <group>
+                            <field name="product_id"/>
+                            <field name="customer_id"/>
+                            <field name="selling_company_id"/>
+                            <field name="original_lot_id"/>
+                        </group>
+                        <group string="Original Sale">
+                            <field name="sale_order_id"/>
+                            <field name="delivery_id"/>
+                            <field name="delivery_date"/>
+                        </group>
+                    </group>
+                    <group string="Warranty">
+                        <field name="warranty_months"/>
+                        <field name="warranty_start"/>
+                        <field name="warranty_end"/>
+                        <field name="warranty_status" widget="badge"/>
+                    </group>
+                    <notebook>
+                        <page string="Company Serial Records">
+                            <field name="local_lot_ids" readonly="1">
+                                <list>
+                                    <field name="company_id"/>
+                                    <field name="lot_id"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="vehicle_after_sales_registry_action" model="ir.actions.act_window">
+        <field name="name">Vehicle Registry</field>
+        <field name="res_model">vehicle.after.sales.registry</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="vehicle_after_sales_root_menu" name="Vehicle After-Sales" sequence="60"/>
+    <menuitem id="vehicle_after_sales_registry_menu" name="Vehicles / VINs" parent="vehicle_after_sales_root_menu" action="vehicle_after_sales_registry_action" sequence="10"/>
+</odoo>

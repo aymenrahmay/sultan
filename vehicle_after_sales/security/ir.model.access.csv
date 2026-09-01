@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_vehicle_registry_user,vehicle.after.sales.registry user,model_vehicle_after_sales_registry,base.group_user,1,1,1,0
+access_vehicle_local_lot_user,vehicle.after.sales.local.lot user,model_vehicle_after_sales_local_lot,base.group_user,1,1,1,0

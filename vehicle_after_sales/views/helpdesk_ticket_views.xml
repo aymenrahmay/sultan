@@ -1,0 +1,41 @@
+<odoo>
+    <record id="helpdesk_ticket_form_vehicle_after_sales" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.vehicle.after.sales</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group string="Vehicle After-Sales" name="vehicle_after_sales">
+                    <group>
+                        <field name="vehicle_registry_id" domain="[]"/>
+                        <field name="vehicle_product_id"/>
+                        <field name="vehicle_vin"/>
+                        <field name="vehicle_selling_company_id"/>
+                    </group>
+                    <group string="Original Sale &amp; Warranty">
+                        <field name="vehicle_sale_order_id"/>
+                        <field name="vehicle_delivery_id"/>
+                        <field name="vehicle_warranty_end"/>
+                        <field name="vehicle_warranty_status" widget="badge"/>
+                        <field name="warranty_coverage_approved"/>
+                    </group>
+                    <group string="Workshop Flow" col="6">
+                        <button name="action_receive_vehicle" string="1. Receive Vehicle" type="object" class="btn-primary" invisible="not vehicle_registry_id or (vehicle_received and not vehicle_returned)"/>
+                        <button name="action_create_vehicle_repair" string="2. Create / Open Repair" type="object" class="btn-secondary" invisible="not vehicle_received or vehicle_returned"/>
+                        <button name="action_return_vehicle" string="3. Return Vehicle" type="object" class="btn-primary" invisible="not vehicle_received or vehicle_returned"/>
+                        <field name="vehicle_received" invisible="1"/>
+                        <field name="vehicle_returned" invisible="1"/>
+                    </group>
+                    <group string="Documents" col="6">
+                        <button name="action_open_vehicle_receipt" string="Receipt" type="object" icon="fa-sign-in" invisible="not vehicle_receipt_id"/>
+                        <button name="action_open_vehicle_repair" string="Repair" type="object" icon="fa-wrench" invisible="not vehicle_repair_id"/>
+                        <button name="action_open_vehicle_return" string="Return" type="object" icon="fa-sign-out" invisible="not vehicle_return_id"/>
+                        <field name="vehicle_receipt_id" invisible="1"/>
+                        <field name="vehicle_repair_id" invisible="1"/>
+                        <field name="vehicle_return_id" invisible="1"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
