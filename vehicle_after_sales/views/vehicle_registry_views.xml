@@ -21,7 +21,13 @@
         <field name="model">vehicle.after.sales.registry</field>
         <field name="arch" type="xml">
             <form string="Vehicle / VIN">
+                <header>
+                    <button name="action_cancel" string="Cancel Registry" type="object" invisible="not active"
+                            confirm="Cancel this registry for a returned vehicle? It will no longer be available for new Helpdesk work. Existing history will be kept."/>
+                </header>
                 <sheet>
+                    <field name="active" invisible="1"/>
+                    <widget name="web_ribbon" title="Cancelled" bg_color="text-bg-danger" invisible="active"/>
                     <div class="oe_button_box" name="button_box">
                         <button name="action_view_repairs" type="object" class="oe_stat_button" icon="fa-wrench">
                             <field name="repair_count" widget="statinfo" string="Repairs"/>
@@ -59,6 +65,18 @@
                     </notebook>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+    <record id="vehicle_after_sales_registry_search" model="ir.ui.view">
+        <field name="name">vehicle.after.sales.registry.search</field>
+        <field name="model">vehicle.after.sales.registry</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="vin"/>
+                <field name="customer_id"/>
+                <filter name="cancelled" string="Cancelled" domain="[('active', '=', False)]" context="{'active_test': False}"/>
+            </search>
         </field>
     </record>
 

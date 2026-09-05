@@ -15,6 +15,15 @@ The customer may visit Company B many times during or after warranty.
 8. Click **3. Return Vehicle** to validate workshop -> customer movement.
 
 ## VIN design
+When a customer returns a sold car, open its registry and click **Cancel Registry**.
+The record is archived: it disappears from active VIN selections and cannot be
+assigned to new Helpdesk tickets or used for new workshop receipts or repairs.
+Past tickets and repairs remain accessible, and an existing workshop visit can
+still return the vehicle. Use the **Cancelled** filter to view cancelled registries.
+Cancellation does not create an inventory return or credit note; process those
+separately. A new validated sales delivery reactivates the same VIN for its new
+customer. Reprocessing the cancelled original delivery does not reactivate it.
+
 The registry is the single business identity for a VIN.
 Odoo stock lots can be company-isolated. Company A keeps the original sold lot. When Company B receives the vehicle, the module creates ONE company-specific operational lot using the sold lot name plus `_repaire` and reuses it on every future workshop visit. It never creates a new serial for each repair.
 

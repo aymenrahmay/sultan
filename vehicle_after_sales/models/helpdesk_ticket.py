@@ -5,7 +5,8 @@ from odoo.exceptions import UserError
 class HelpdeskTicket(models.Model):
     _inherit = "helpdesk.ticket"
 
-    vehicle_registry_id = fields.Many2one("vehicle.after.sales.registry", string="Vehicle / VIN", index=True)
+    vehicle_registry_id = fields.Many2one("vehicle.after.sales.registry", string="Vehicle / VIN", index=True, domain=[("active", "=", True)])
+    vehicle_registry_active = fields.Boolean(related="vehicle_registry_id.active")
     vehicle_product_id = fields.Many2one(related="vehicle_registry_id.product_id", string="Vehicle Product", readonly=True)
     vehicle_vin = fields.Char(related="vehicle_registry_id.vin", string="VIN", readonly=True)
     vehicle_selling_company_id = fields.Many2one(related="vehicle_registry_id.selling_company_id", string="Selling Company", readonly=True)
@@ -22,6 +23,12 @@ class HelpdeskTicket(models.Model):
     vehicle_receipt_id = fields.Many2one("stock.picking", string="Vehicle Receipt", readonly=True, copy=False)
     vehicle_return_id = fields.Many2one("stock.picking", string="Vehicle Return", readonly=True, copy=False)
     vehicle_repair_id = fields.Many2one("repair.order", string="Vehicle Repair", readonly=True, copy=False)
+
+    @api.constrains("vehicle_registry_id")
+    def _check_vehicle_registry_active(self):
+        for ticket in self:
+            if ticket.vehicle_registry_id and not ticket.vehicle_registry_id.active:
+                raise UserError(_("This vehicle registry is cancelled. Select an active vehicle."))
 
     @api.onchange("vehicle_registry_id")
     def _onchange_vehicle_registry_id(self):
@@ -65,6 +72,8 @@ class HelpdeskTicket(models.Model):
         self.ensure_one()
         if not self.vehicle_registry_id:
             raise UserError(_("Select a Vehicle / VIN first."))
+        if to_workshop:
+            self._check_vehicle_registry_active()
         if not self.partner_id:
             raise UserError(_("A customer is required."))
 
@@ -172,6 +181,7 @@ class HelpdeskTicket(models.Model):
                 "res_id": self.vehicle_repair_id.id,
             }
 
+        self._check_vehicle_registry_active()
         company = self.company_id
         if not company:
             raise UserError(_("The helpdesk ticket must belong to a company."))

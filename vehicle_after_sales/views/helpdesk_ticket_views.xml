@@ -7,7 +7,8 @@
             <xpath expr="//sheet" position="inside">
                 <group string="Vehicle After-Sales" name="vehicle_after_sales">
                     <group>
-                        <field name="vehicle_registry_id" domain="[]"/>
+                        <field name="vehicle_registry_id" domain="[('active', '=', True)]"/>
+                        <field name="vehicle_registry_active" invisible="1"/>
                         <field name="vehicle_product_id"/>
                         <field name="vehicle_vin"/>
                         <field name="vehicle_selling_company_id"/>
@@ -20,8 +21,8 @@
                         <field name="warranty_coverage_approved"/>
                     </group>
                     <group string="Workshop Flow" col="6">
-                        <button name="action_receive_vehicle" string="1. Receive Vehicle" type="object" class="btn-primary" invisible="not vehicle_registry_id or (vehicle_received and not vehicle_returned)"/>
-                        <button name="action_create_vehicle_repair" string="2. Create / Open Repair" type="object" class="btn-secondary" invisible="not vehicle_received or vehicle_returned"/>
+                        <button name="action_receive_vehicle" string="1. Receive Vehicle" type="object" class="btn-primary" invisible="not vehicle_registry_id or not vehicle_registry_active or (vehicle_received and not vehicle_returned)"/>
+                        <button name="action_create_vehicle_repair" string="2. Create / Open Repair" type="object" class="btn-secondary" invisible="not vehicle_received or vehicle_returned or (not vehicle_registry_active and not vehicle_repair_id)"/>
                         <button name="action_return_vehicle" string="3. Return Vehicle" type="object" class="btn-primary" invisible="not vehicle_received or vehicle_returned"/>
                         <field name="vehicle_received" invisible="1"/>
                         <field name="vehicle_returned" invisible="1"/>

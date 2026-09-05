@@ -11,6 +11,12 @@ class VehicleAfterSalesRegistry(models.Model):
     _rec_name = "vin"
 
     active = fields.Boolean(default=True)
+
+    def action_cancel(self):
+        """Retain the VIN history while removing after-sales eligibility."""
+        self.write({"active": False})
+        return True
+
     vin = fields.Char(string="VIN / Serial Number", required=True, index=True)
     product_id = fields.Many2one("product.product", string="Vehicle Product", required=True, index=True)
     customer_id = fields.Many2one("res.partner", string="Current Customer", required=True, index=True)

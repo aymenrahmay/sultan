@@ -10,7 +10,7 @@ class StockPicking(models.Model):
         return res
 
     def _vehicle_after_sales_register_deliveries(self):
-        Registry = self.env["vehicle.after.sales.registry"].sudo()
+        Registry = self.env["vehicle.after.sales.registry"].sudo().with_context(active_test=False)
         for picking in self:
             if picking.state != "done" or not picking.partner_id:
                 continue
@@ -18,6 +18,9 @@ class StockPicking(models.Model):
             if picking.location_id.usage != "internal" or picking.location_dest_id.usage != "customer":
                 continue
             sale = getattr(picking, "sale_id", False)
+            # Workshop returns are not new sales and must not reactivate a VIN.
+            if not sale:
+                continue
             for ml in picking.move_line_ids:
                 product = ml.product_id
                 if not product.product_tmpl_id.is_vehicle_after_sales:
@@ -41,6 +44,9 @@ class StockPicking(models.Model):
                 }
                 registry = Registry.search([("vin", "=", lot.name), ("product_id", "=", product.id)], limit=1)
                 if registry:
+                    if not registry.active and registry.delivery_id == picking:
+                        continue
+                    vals["active"] = True
                     registry.write(vals)
                 else:
                     registry = Registry.create(vals)
