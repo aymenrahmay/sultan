@@ -58,7 +58,7 @@
                 <a href="/employee/self-service/leaves" class="o_ss_action"><span class="o_ss_icon">☀</span><strong>Time Off</strong><small>Balances and requests</small><b>Open →</b></a>
                 <a href="/employee/self-service/profile" class="o_ss_action"><span class="o_ss_icon">◉</span><strong>Personal Details</strong><small>Review and update information</small><b>Open →</b></a>
             </div>
-            <section class="o_ss_panel"><h2>Available time off</h2><div class="o_ss_balances">
+            <section t-if="False" class="o_ss_panel"><h2>Available time off</h2><div class="o_ss_balances">
                 <div t-foreach="balances" t-as="balance" class="o_ss_balance"><strong t-esc="balance['record'].name"/><span t-if="balance['remaining'] is not None"><b t-esc="round(balance['remaining'], 2)"/> <small t-esc="'hours' if balance['unit'] == 'hour' else 'days'"/></span><span t-else="">No allocation required</span></div>
             </div></section>
         </t>
@@ -76,7 +76,7 @@
                     <label>Reason<textarea name="description" rows="3" placeholder="Optional note"/></label>
                     <button class="o_ss_btn o_ss_btn_primary" type="submit">Submit request</button>
                 </form></section>
-                <section class="o_ss_panel"><h2>Your balances</h2><div class="o_ss_balances"><div t-foreach="balances" t-as="balance" class="o_ss_balance"><strong t-esc="balance['record'].name"/><span t-if="balance['remaining'] is not None"><b t-esc="round(balance['remaining'], 2)"/> <small t-esc="'hours' if balance['unit'] == 'hour' else 'days'"/></span><span t-else="">Available</span></div></div></section>
+                <section t-if="False" class="o_ss_panel"><h2>Your balances</h2><div class="o_ss_balances"><div t-foreach="balances" t-as="balance" class="o_ss_balance"><strong t-esc="balance['record'].name"/><span t-if="balance['remaining'] is not None"><b t-esc="round(balance['remaining'], 2)"/> <small t-esc="'hours' if balance['unit'] == 'hour' else 'days'"/></span><span t-else="">Available</span></div></div></section>
             </div>
             <section class="o_ss_panel"><h2>Recent requests</h2><div class="o_ss_table_wrap"><table class="o_ss_table"><thead><tr><th>Type</th><th>Dates</th><th>Duration</th><th>Status</th></tr></thead><tbody><tr t-foreach="leaves" t-as="leave"><td t-esc="leave.holiday_status_id.name"/><td><t t-esc="leave.request_date_from"/> – <t t-esc="leave.request_date_to"/></td><td><t t-esc="round(leave.number_of_days, 2)"/> days</td><td><span class="o_ss_status" t-att-class="'o_ss_status state-' + leave.state" t-esc="dict(leave._fields['state'].selection).get(leave.state)"/></td></tr><tr t-if="not leaves"><td colspan="4">No requests yet.</td></tr></tbody></table></div></section>
         </t>
