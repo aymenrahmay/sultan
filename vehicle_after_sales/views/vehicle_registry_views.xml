@@ -7,6 +7,7 @@
                 <field name="vin"/>
                 <field name="product_id"/>
                 <field name="customer_id"/>
+                <field name="delivery_address_id"/>
                 <field name="selling_company_id"/>
                 <field name="sale_order_id"/>
                 <field name="delivery_date"/>
