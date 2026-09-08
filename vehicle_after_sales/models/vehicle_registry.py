@@ -20,11 +20,19 @@ class VehicleAfterSalesRegistry(models.Model):
     vin = fields.Char(string="VIN / Serial Number", required=True, index=True)
     product_id = fields.Many2one("product.product", string="Vehicle Product", required=True, index=True)
     customer_id = fields.Many2one("res.partner", string="Current Customer", required=True, index=True)
-    delivery_address_id = fields.Many2one("res.partner", string="Delivery address", readonly=True, store=True)
+
 
     selling_company_id = fields.Many2one("res.company", string="Selling Company", required=True, index=True)
     original_lot_id = fields.Many2one("stock.lot", string="Original Serial/Lot", readonly=True)
     sale_order_id = fields.Many2one("sale.order", string="Original Sales Order", readonly=True)
+    delivery_address_id = fields.Many2one(
+        "res.partner",
+        string="Delivery Address",
+        related="sale_order_id.partner_shipping_id",
+        store=True,
+        readonly=True,
+    )
+
     delivery_id = fields.Many2one("stock.picking", string="Original Delivery", readonly=True)
     delivery_date = fields.Datetime(string="Delivery Date", readonly=True)
     warranty_months = fields.Integer(string="Warranty Months", default=36)

@@ -7,9 +7,9 @@
                 <field name="vin"/>
                 <field name="product_id"/>
                 <field name="customer_id"/>
-                <field name="delivery_address_id"/>
                 <field name="selling_company_id"/>
                 <field name="sale_order_id"/>
+                <field name="delivery_address_id"/>
                 <field name="delivery_date"/>
                 <field name="warranty_end"/>
                 <field name="warranty_status" widget="badge"/>
@@ -49,6 +49,7 @@
                         </group>
                     </group>
                     <group string="Warranty">
+                        <field name="delivery_address_id" context="{'show_address': 1}"/>
                         <field name="warranty_months"/>
                         <field name="warranty_start"/>
                         <field name="warranty_end"/>

@@ -34,7 +34,10 @@ class HelpdeskTicket(models.Model):
     def _onchange_vehicle_registry_id(self):
         for ticket in self:
             if ticket.vehicle_registry_id:
-                ticket.partner_id = ticket.vehicle_registry_id.delivery_address_id or ticket.vehicle_registry_id.customer_id
+                ticket.partner_id = (
+                    ticket.vehicle_registry_id.delivery_address_id
+                    or ticket.vehicle_registry_id.customer_id
+                )
                 # Helpdesk Enterprise commonly has product_id; set it when available.
                 if "product_id" in ticket._fields:
                     ticket.product_id = ticket.vehicle_registry_id.product_id

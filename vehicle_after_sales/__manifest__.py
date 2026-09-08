@@ -1,6 +1,6 @@
 {
     "name": "Multi-Company Vehicle After Sales",
-    "version": "19.0.1.0.1",
+    "version": "19.0.1.0.2",
     "category": "Services/Helpdesk",
     "summary": "Cross-company vehicle warranty, workshop reception and repair traceability by VIN",
     "license": "LGPL-3",
