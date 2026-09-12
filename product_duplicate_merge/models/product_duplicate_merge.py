@@ -9,7 +9,8 @@ class ProductDuplicateMerge(models.Model):
     _name = 'product.duplicate.merge'
     _description = 'Product Duplicate Merge Proposal'
     _inherit = ['mail.thread', 'mail.activity.mixin']
-    _order = 'risk_level desc, name, id'
+    # Risk is computed live and cannot be used in SQL ordering.
+    _order = 'name, id'
 
     name = fields.Char(required=True, index=True, tracking=True)
     normalized_name = fields.Char(index=True, readonly=True)
