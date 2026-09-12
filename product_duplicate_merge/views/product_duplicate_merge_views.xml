@@ -83,8 +83,8 @@
                 <filter name="detected" string="Detected" domain="[('state','=','detected')]"/>
                 <filter name="reviewed" string="Reviewed" domain="[('state','=','reviewed')]"/>
                 <filter name="merged" string="Merged" domain="[('state','=','merged')]"/>
-                <group expand="0" string="Group By">
-                    <filter string="State" context="{'group_by': 'state'}"/>
+                <group>
+                    <filter name="group_by_state" string="State" context="{'group_by': 'state'}"/>
                 </group>
             </search>
         </field>
