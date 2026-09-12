@@ -62,24 +62,42 @@ class ProductDuplicateMerge(models.Model):
 
     @api.depends('product_ids')
     def _compute_metrics(self):
-        Quant = self.env['stock.quant']
+        products = self.mapped('product_ids')
+        quantities = {
+            product.id: (quantity, reserved)
+            for product, quantity, reserved in self.env['stock.quant']._read_group(
+                [('product_id', 'in', products.ids),
+                 ('location_id.usage', '=', 'internal')],
+                ['product_id'], ['quantity:sum', 'reserved_quantity:sum'],
+            )
+        } if products else {}
         for rec in self:
             rec.product_count = len(rec.product_ids)
             rec.company_ids = rec.product_ids.mapped('company_id')
-            if not rec.product_ids:
-                rec.total_qty = 0.0
-                rec.reserved_qty = 0.0
-                continue
-            quants = Quant.search([
-                ('product_id', 'in', rec.product_ids.ids),
-                ('location_id.usage', '=', 'internal'),
-            ])
-            rec.total_qty = sum(quants.mapped('quantity'))
-            rec.reserved_qty = sum(quants.mapped('reserved_quantity'))
+            rec.total_qty = sum(quantities.get(p.id, (0.0, 0.0))[0] for p in rec.product_ids)
+            rec.reserved_qty = sum(quantities.get(p.id, (0.0, 0.0))[1] for p in rec.product_ids)
 
     @api.depends('product_ids', 'master_product_id')
     def _compute_risk(self):
-        Quant = self.env['stock.quant']
+        all_products = self.mapped('product_ids')
+        reserved_product_ids = {
+            product.id
+            for product, in self.env['stock.quant']._read_group(
+                [('product_id', 'in', all_products.ids),
+                 ('location_id.usage', '=', 'internal'),
+                 ('reserved_quantity', '!=', 0)],
+                ['product_id'], [],
+            )
+        } if all_products else set()
+        open_move_counts = {
+            product.id: count
+            for product, count in self.env['stock.move']._read_group(
+                [('product_id', 'in', all_products.ids),
+                 ('state', 'not in', ['done', 'cancel'])],
+                ['product_id'], ['__count'],
+            )
+        } if all_products else {}
+        precision = self.env['decimal.precision'].precision_get('Product Price') or 2
         for rec in self:
             issues = []
             blockers = []
@@ -108,25 +126,16 @@ class ProductDuplicateMerge(models.Model):
 
             if master and products.filtered(lambda p: p.is_storable):
                 # Cost differences can generate unintended accounting valuation differences.
-                precision = self.env['decimal.precision'].precision_get('Product Price') or 2
                 for p in products - master:
                     if float_compare(p.standard_price, master.standard_price, precision_digits=precision) != 0:
                         blockers.append(_('Different product costs detected.'))
                         break
 
-            quants = Quant.search([
-                ('product_id', 'in', products.ids),
-                ('location_id.usage', '=', 'internal'),
-                ('reserved_quantity', '!=', 0),
-            ]) if products else Quant
-            if quants:
+            if reserved_product_ids.intersection(products.ids):
                 blockers.append(_('Reserved stock exists. Unreserve/cancel reservations before merging.'))
 
             # Open stock moves are intentionally blocked: they would still reference duplicate IDs.
-            open_moves = self.env['stock.move'].search_count([
-                ('product_id', 'in', products.ids),
-                ('state', 'not in', ['done', 'cancel']),
-            ]) if products else 0
+            open_moves = sum(open_move_counts.get(p.id, 0) for p in products)
             if open_moves:
                 blockers.append(_('%s open stock movement(s) still reference these products.') % open_moves)
 
