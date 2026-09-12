@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_product_duplicate_merge_root"
+              name="Product Data Cleaning"
+              parent="stock.menu_stock_config_settings"
+              sequence="90"
+              groups="stock.group_stock_manager"/>
+    <menuitem id="menu_product_duplicate_merge"
+              name="Duplicate Products"
+              parent="menu_product_duplicate_merge_root"
+              action="action_product_duplicate_merge"
+              sequence="10"/>
+    <menuitem id="menu_product_duplicate_detect"
+              name="Detect Exact-Name Duplicates"
+              parent="menu_product_duplicate_merge_root"
+              action="action_detect_product_duplicates_server"
+              sequence="20"/>
+</odoo>

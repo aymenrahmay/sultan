@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_product_duplicate_merge_list" model="ir.ui.view">
+        <field name="name">product.duplicate.merge.list</field>
+        <field name="model">product.duplicate.merge</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="risk_level == 'blocked'" decoration-success="risk_level == 'low'">
+                <field name="name"/>
+                <field name="product_count"/>
+                <field name="total_qty"/>
+                <field name="reserved_qty"/>
+                <field name="master_product_id"/>
+                <field name="risk_level" widget="badge"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_product_duplicate_merge_form" model="ir.ui.view">
+        <field name="name">product.duplicate.merge.form</field>
+        <field name="model">product.duplicate.merge</field>
+        <field name="arch" type="xml">
+            <form string="Product Duplicate Merge">
+                <header>
+                    <button name="action_mark_reviewed" type="object" string="Mark Reviewed"
+                            class="btn-secondary" invisible="state != 'detected'"/>
+                    <button name="action_merge" type="object" string="Merge into Master"
+                            class="btn-primary" confirm="This will migrate internal on-hand stock to the selected master product and archive the duplicates. Continue?"
+                            invisible="state == 'merged' or state == 'ignored' or risk_level == 'blocked'"/>
+                    <button name="action_ignore" type="object" string="Ignore"
+                            invisible="state == 'merged' or state == 'ignored'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="detected,reviewed,merged,ignored"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="master_product_id" options="{'no_create': True}"/>
+                            <field name="product_count"/>
+                            <field name="total_qty"/>
+                            <field name="reserved_qty"/>
+                        </group>
+                        <group>
+                            <field name="risk_level" widget="badge"/>
+                            <field name="merged_at" invisible="state != 'merged'"/>
+                            <field name="merged_by" invisible="state != 'merged'"/>
+                        </group>
+                    </group>
+                    <group string="Automatic checks">
+                        <field name="risk_message" nolabel="1" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Duplicates">
+                            <field name="product_ids" readonly="1">
+                                <list>
+                                    <field name="default_code"/>
+                                    <field name="name"/>
+                                    <field name="qty_available"/>
+                                    <field name="uom_id"/>
+                                    <field name="categ_id"/>
+                                    <field name="standard_price"/>
+                                    <field name="tracking"/>
+                                    <field name="active"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <chatter/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_product_duplicate_merge_search" model="ir.ui.view">
+        <field name="name">product.duplicate.merge.search</field>
+        <field name="model">product.duplicate.merge</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="master_product_id"/>
+                <filter name="detected" string="Detected" domain="[('state','=','detected')]"/>
+                <filter name="reviewed" string="Reviewed" domain="[('state','=','reviewed')]"/>
+                <filter name="merged" string="Merged" domain="[('state','=','merged')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="State" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_product_duplicate_merge" model="ir.actions.act_window">
+        <field name="name">Duplicate Products</field>
+        <field name="res_model">product.duplicate.merge</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_product_duplicate_merge_search"/>
+    </record>
+
+    <record id="action_detect_product_duplicates_server" model="ir.actions.server">
+        <field name="name">Detect Exact-Name Duplicates</field>
+        <field name="model_id" ref="model_product_duplicate_merge"/>
+        <field name="state">code</field>
+        <field name="code">action = env['product.duplicate.merge'].action_detect_duplicates()</field>
+    </record>
+</odoo>
